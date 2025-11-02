@@ -9,19 +9,21 @@ public class TransactionReceipt {
 	private double PostTransactionBalance;
 	private Calendar postTransactionMaturityDate;
 	
-	public TransactionReceipt(TransactionTicket ticket, boolean TranactionSuccessIndicatorFlag, double PreTransactionBalance, double PostTransactionBalance, Calendar postTransactionMaturityDate ) {
+	public TransactionReceipt(TransactionTicket ticket, boolean TranactionSuccessIndicatorFlag,String ReasonForFailure, double PreTransactionBalance, double PostTransactionBalance, Calendar postTransactionMaturityDate ) {
 		this.ticket = ticket;
 		this.TransactionSuccessIndicatorFlag = TranactionSuccessIndicatorFlag;
 		this.PreTransactionBalance = PreTransactionBalance;
 		this.PostTransactionBalance = PostTransactionBalance;
 		this.postTransactionMaturityDate = postTransactionMaturityDate;
+		this.ReasonForFailure = ReasonForFailure;
 	}
 	
-	public TransactionReceipt(TransactionTicket ticket, boolean TranactionSuccessIndicatorFlag, double PreTransactionBalance, double PostTransactionBalance) {
+	public TransactionReceipt(TransactionTicket ticket, boolean TranactionSuccessIndicatorFlag,String ReasonForFailure, double PreTransactionBalance, double PostTransactionBalance) {
 		this.ticket = ticket;
 		this.TransactionSuccessIndicatorFlag = TranactionSuccessIndicatorFlag;
 		this.PreTransactionBalance = PreTransactionBalance;
 		this.PostTransactionBalance = PostTransactionBalance;
+		this.ReasonForFailure = ReasonForFailure;
 	}
 	
 	//getters 

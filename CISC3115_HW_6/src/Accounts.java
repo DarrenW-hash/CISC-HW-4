@@ -38,6 +38,7 @@ public class Accounts {
 		this.AccountNumber = other.AccountNumber;
 		this.balance = other.balance;
 		this.accountStatus = other.accountStatus;
+		this.accountType = other.accountType;
 		
 		if(other.date != null) {
 			this.date = other.date;
@@ -47,7 +48,7 @@ public class Accounts {
 	}
 	//getters
 	public Depositors getdepositor() {
-		return depositor;
+		return new Depositors(depositor);
 	}
 	public int getAccountNumber() {
 		return AccountNumber;
@@ -59,13 +60,16 @@ public class Accounts {
 		return transactionReceipts;
 	}
 	public Check getCheck() {
-		return check;
+		return new Check(check);
 	}
 	public double getbalance() {
 		return balance;
 	}
 	public Calendar getDate() {
-		return date;
+		return (Calendar) date.clone();
+	}
+	public String getStatus()	{
+		return accountStatus;
 	}
 	
 	//setters
@@ -88,6 +92,13 @@ public class Accounts {
 	//toString()
 	@Override
 	public String toString()	{
-		return depositor.toString() + " " + AccountNumber + " " + accountType + " " + check.toString() + balance + " " + date ;
+		return depositor.toString() + " " + AccountNumber + " " + accountType + " " + balance + " " + date ;
+	}
+	
+	public TransactionReceipt makeWithDrawal(TransactionTicket ticket, Scanner userinput)	{
+		double preTransaction = getbalance();
+		Calendar currentDate = Calendar.getInstance();
+		TransactionReceipt Receipt;
+		
 	}
 }

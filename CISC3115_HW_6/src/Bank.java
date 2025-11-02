@@ -28,8 +28,39 @@ public class Bank {
 		}
 	}
 	
+	//getter 
+	public ArrayList getbankAccounts()	{
+		ArrayList<Accounts> copylist = new ArrayList<>();
+		for(Accounts a : bankAccounts) {
+			//System.out.println(a);
+			copylist.add(new Accounts(a));
+		}
+		return copylist;
+	}
+	
 	public void addAccounts(Accounts Acc)	{
 		System.out.println("Added Account");
 		bankAccounts.add(Acc);
+	}
+	private int findAcct(int accNum)	{
+		int index = 0;
+		for(int i = 0; i < bankAccounts.size(); i++)	{
+			if(bankAccounts.get(i).getAccountNumber() == accNum)	{
+				index = i;
+				return i;
+			}
+		}
+		index =-1;
+		return index;
+	}
+	public TransactionReceipt makeWithdrawal(TransactionTicket ticket, int accountNumber, Scanner userinput) {
+		int index = findAcct(accountNumber);
+		if(index == -1) {
+			String ReasonForFailure  = "Error Account Number:" + accountNumber +" not found.";
+			TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonForFailure, 0.0, 0.0, Calendar.getInstance());
+			return Receipt;
+		}else {
+			
+		}
 	}
 }
