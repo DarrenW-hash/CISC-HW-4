@@ -9,21 +9,22 @@ public class TransactionReceipt {
 	private double PostTransactionBalance;
 	private Calendar postTransactionMaturityDate;
 	
-	public TransactionReceipt(TransactionTicket ticket, boolean TranactionSuccessIndicatorFlag,String ReasonForFailure, double PreTransactionBalance, double PostTransactionBalance, Calendar postTransactionMaturityDate ) {
+	public TransactionReceipt(TransactionTicket ticket, boolean TranactionSuccessIndicatorFlag, double PreTransactionBalance, double PostTransactionBalance, Calendar postTransactionMaturityDate ) {
 		this.ticket = ticket;
 		this.TransactionSuccessIndicatorFlag = TranactionSuccessIndicatorFlag;
 		this.PreTransactionBalance = PreTransactionBalance;
 		this.PostTransactionBalance = PostTransactionBalance;
 		this.postTransactionMaturityDate = postTransactionMaturityDate;
-		this.ReasonForFailure = ReasonForFailure;
+	
 	}
 	
-	public TransactionReceipt(TransactionTicket ticket, boolean TranactionSuccessIndicatorFlag,String ReasonForFailure, double PreTransactionBalance, double PostTransactionBalance) {
+	public TransactionReceipt(TransactionTicket ticket, boolean TranactionSuccessIndicatorFlag,String ReasonForFailure, double PreTransactionBalance, double PostTransactionBalance, Calendar postTransactionMaturityDate) {
 		this.ticket = ticket;
 		this.TransactionSuccessIndicatorFlag = TranactionSuccessIndicatorFlag;
 		this.PreTransactionBalance = PreTransactionBalance;
 		this.PostTransactionBalance = PostTransactionBalance;
 		this.ReasonForFailure = ReasonForFailure;
+		this.postTransactionMaturityDate = postTransactionMaturityDate;
 	}
 	
 	//getters 
@@ -33,16 +34,26 @@ public class TransactionReceipt {
 	public boolean getTransactionSuccessIndicatorFlag() {
 		return TransactionSuccessIndicatorFlag;
 	}
-	public String ReasonForFailure() {
+	public String getReasonForFailure() {
 		return ReasonForFailure;
-	}
-	public double getPreTransactionFailureReason() {
-		return PreTransactionBalance;
 	}
 	public double getPostTransactionBalance() {
 		return PostTransactionBalance;
 	}
+	public double getPreTransactionBalance() {
+		return PreTransactionBalance;
+	}
 	public Calendar getPostTransactionMaturityDate() {
 		return postTransactionMaturityDate;
+	}
+	
+	//toString 
+	@Override
+	public String toString()	{
+		if(postTransactionMaturityDate != null) {
+			return ticket.toString() +  " " + TransactionSuccessIndicatorFlag + " " + ReasonForFailure + " " + PreTransactionBalance + " " + PostTransactionBalance + " " + postTransactionMaturityDate;
+		}else {
+			return ticket.toString() +  " " + TransactionSuccessIndicatorFlag + " " + ReasonForFailure + " " + PreTransactionBalance + " " + PostTransactionBalance;
+		}
 	}
 }

@@ -41,4 +41,17 @@ public class Name {
 	public String toString() {
 		return FirstName + " " + lastName;
 	}
+	
+	//equals method
+	public boolean equals(Object obj)	{
+		 if (this == obj)
+		        return true; 
+		    if (obj == null)
+		        return false; 
+
+		    Name other = (Name) obj; 
+
+		    return this.FirstName.equals(other.FirstName)
+		            && this.lastName.equals(other.lastName);
+	}
 }

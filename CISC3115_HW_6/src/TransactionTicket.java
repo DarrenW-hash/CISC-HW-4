@@ -26,4 +26,12 @@ public class TransactionTicket {
 	public int getAccountnumber() {
 		return accountNumber;
 	}
+	public double getTransactionAmount() {
+		return amountofTransaction;
+	}
+	//toString
+	@Override
+	public String toString()	{
+		return accountNumber + " " + dateofTransaction + " " + typeofTransaction + " " + amountofTransaction + " " + termofCD;
+	}
 }

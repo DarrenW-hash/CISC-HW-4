@@ -37,4 +37,19 @@ public class Depositors {
 	public String toString()	{
 		return name.toString() + " " + SSnumber;
 	}
+	
+	//eqauls method 
+	@Override
+	public boolean equals(Object obj)	{
+		if(this == obj) {
+			return true;
+		}
+		if(obj == null)	{
+			return false;
+		}
+		
+		Depositors other  = (Depositors) obj;
+		
+		return this.name.equals(other.name) && this.SSnumber.equals(other.SSnumber);
+	}
 }

@@ -29,7 +29,7 @@ public class Bank {
 	}
 	
 	//getter 
-	public ArrayList getbankAccounts()	{
+	public ArrayList<Accounts> getbankAccounts()	{
 		ArrayList<Accounts> copylist = new ArrayList<>();
 		for(Accounts a : bankAccounts) {
 			//System.out.println(a);
@@ -37,7 +37,9 @@ public class Bank {
 		}
 		return copylist;
 	}
-	
+	public void setindex(int i)	{
+		index = i;
+	}
 	public void addAccounts(Accounts Acc)	{
 		System.out.println("Added Account");
 		bankAccounts.add(Acc);
@@ -46,13 +48,23 @@ public class Bank {
 		int index = 0;
 		for(int i = 0; i < bankAccounts.size(); i++)	{
 			if(bankAccounts.get(i).getAccountNumber() == accNum)	{
-				index = i;
+				setindex(i);
 				return i;
 			}
 		}
 		index =-1;
+		setindex(index);
 		return index;
 	}
+	
+	public int getindex() {
+		return index;
+	}
+	
+	/* Processes a withdrawal request for a specific account.
+	 * Finds the account by account number, and if found, delegates the withdrawal
+	 * to the Account object. If the account is not found, returns a failure receipt.
+	 */
 	public TransactionReceipt makeWithdrawal(TransactionTicket ticket, int accountNumber, Scanner userinput) {
 		int index = findAcct(accountNumber);
 		if(index == -1) {
@@ -60,7 +72,7 @@ public class Bank {
 			TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonForFailure, 0.0, 0.0, Calendar.getInstance());
 			return Receipt;
 		}else {
-			
+			return bankAccounts.get(index).makeWithDrawal(ticket, userinput);
 		}
 	}
 }
