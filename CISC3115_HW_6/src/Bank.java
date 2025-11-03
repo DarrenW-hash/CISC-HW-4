@@ -75,4 +75,46 @@ public class Bank {
 			return bankAccounts.get(index).makeWithDrawal(ticket, userinput);
 		}
 	}
+	/* Processes a deposit request for a specific account.
+	 * Finds the account by account number, and if found, delegates the deposit
+	 * to the Account object. If the account is not found, returns a failure receipt.	
+	 */
+	public TransactionReceipt makedeposit(TransactionTicket ticket, int accountNumber, Scanner userinput) {
+		int index = findAcct(accountNumber);
+		if(index == -1) {
+			String ReasonforFailure = "Error Account Number " + accountNumber + " not found.";
+			TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonforFailure, 0.0, 0.0, Calendar.getInstance());
+			return Receipt;
+		}else {
+			return bankAccounts.get(index).makedeposit(ticket ,userinput );
+		}
+	}
+	/* Retrieves the current balance of a specific account.
+	 * Finds the account by account number, and if found, delegates the balance
+	 * retrieval to the Account object. If the account is not found, returns a failure receipt.	
+	 */
+	public TransactionReceipt getBalance(TransactionTicket ticket, int accountNumber) {
+		int index = findAcct(accountNumber);
+		if(index == -1) {
+			String ReasonforFailure = "Error Account Number" + accountNumber + " not found.";
+			TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonforFailure, 0.0, 0.0, Calendar.getInstance());
+			return Receipt;
+		}else {
+			return bankAccounts.get(index).getBalance(ticket);
+		}
+	}
+	/* Processes a check clearing transaction for a specific account.
+	 * Finds the account by account number, and if found, delegates the check clearing
+	 * to the Account object. If the account is not found, returns a failure receipt.
+	 */
+	public TransactionReceipt clearCheck(TransactionTicket ticket, int accountNumber, Calendar checkDate) {
+		int index = findAcct(accountNumber);
+		if(index == -1) {
+			String ReasonforFailure = "Error Account Number" + accountNumber + " not found.";
+			TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonforFailure, 0.0, 0.0, Calendar.getInstance());
+			return Receipt;
+		}else {
+			return bankAccounts.get(index).clearCheck(ticket,checkDate);
+		}
+	}
 }

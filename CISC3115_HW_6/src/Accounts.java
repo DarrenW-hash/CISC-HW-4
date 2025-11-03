@@ -174,4 +174,163 @@ public class Accounts {
 		}
 		
 	}
+	
+	/* Processes a deposit into the account.
+	 * Handles standard accounts and CD accounts with maturity date restrictions.
+	 * Validates account status and deposit amount.
+	 * Updates balances and maturity date as needed.
+	 */
+		public TransactionReceipt makedeposit(TransactionTicket ticket, Scanner userinput) {
+			double preTransaction = getbalance();
+			Calendar currentDate = Calendar.getInstance();
+			TransactionReceipt receipt;
+			
+			 // Check if the account is closed
+			if(getStatus().equals("Closed")) {
+				String reason = "Error: Account Number : " + ticket.getAccountnumber()+ " is CLOSED";
+				receipt = new TransactionReceipt(ticket, false, reason, preTransaction, preTransaction, currentDate);
+				addtransactionReceipt(receipt); 
+				return receipt;
+			}else {
+				 // Handle CD accounts separately
+				if(getaccountType().equals("CD")) {
+					if(currentDate.before(getDate())) {
+						Calendar maturity = getDate();
+						int month = maturity.get(Calendar.MONTH) + 1; // months are 0-based
+						int day = maturity.get(Calendar.DAY_OF_MONTH);
+						int year = maturity.get(Calendar.YEAR);
+						String reason = "Error: Maturity Date " + month + "/" + day + "/" + year + " not reached ";
+						receipt = new TransactionReceipt(ticket, false, reason, getbalance(),getbalance(), date);
+						addtransactionReceipt(receipt); 
+						return receipt;
+					}else {
+						double newBalance = preTransaction + ticket.getTransactionAmount();
+						// Prompt user to select new maturity period for CD
+						System.out.println("Select new maturity period in months: 6, 12, 18, or 24");
+						int months = userinput.nextInt();
+						if (months == 6 || months == 12 || months == 18 || months == 24) {
+			                Calendar newMaturity = (Calendar) currentDate.clone();
+			                newMaturity.add(Calendar.MONTH, months);
+			                setCalendar(newMaturity);
+						}else {
+							System.out.println("Invalid input. Maturity date not updated.");
+						}
+						// Successful deposit
+						setbalance(newBalance);
+						receipt = new TransactionReceipt(ticket, true, preTransaction, newBalance, date);
+						addtransactionReceipt(receipt); 
+						return receipt;
+					}
+				}else {
+					 // Handle standard accounts (Checking, Savings)
+					if(ticket.getTransactionAmount() < 0) {
+						String reason = String.format(
+				        	    "Error: Invalid Deposit input: %.2f",
+				        	    ticket.getTransactionAmount()
+				        	);
+						receipt = new TransactionReceipt(ticket, false, reason, preTransaction, preTransaction, currentDate);
+						addtransactionReceipt(receipt); 
+				        return receipt;
+					}else {
+						// Successful deposit
+						double newBalance = preTransaction + ticket.getTransactionAmount();
+						setbalance(newBalance);
+						receipt = new TransactionReceipt(ticket, true, preTransaction, newBalance, currentDate);
+						addtransactionReceipt(receipt); 
+						return receipt;
+					}
+				}
+			}
+		}
+	/* Retrieves the current balance of the account.
+	* Creates a TransactionReceipt to record the balance inquiry.
+	* 	
+	*/
+	public TransactionReceipt getBalance(TransactionTicket ticket){
+		TransactionReceipt receipt;
+		Calendar currentDate = Calendar.getInstance();
+		receipt = new TransactionReceipt(ticket,true,getbalance(),0,currentDate);
+		addtransactionReceipt(receipt);
+		return receipt;
+	}
+	/* Processes clearing of a check for a checking account.
+	 * Validates account status, check date (post-dated or stale), and available funds.
+	 * Applies a $2.50 fee for insufficient funds (bounced check) and updates the account balance.
+	 */
+	public TransactionReceipt clearCheck(TransactionTicket ticket, Calendar checkDate) {
+		double preTransaction = getbalance();
+		TransactionReceipt receipt;
+		Calendar currentDate = Calendar.getInstance();
+		Calendar sixMonthsAgo = (Calendar)currentDate.clone();
+		sixMonthsAgo.add(Calendar.MONTH, -6);
+		// Create a Check object representing the check being cleared
+		Check check = new Check(ticket.getAccountnumber(), ticket.getTransactionAmount(), checkDate);	
+		 // Check if the account is closed
+//		if(getAccountStatus().equals("Closed")) {
+//		String reason = "Error: Account Number : " + ticket.getAccountnumber()+ " is CLOSED";
+//		receipt = new TransactionReceipt(ticket, false, reason, preTransaction, preTransaction, currentDate);
+//		return receipt;
+//		}else {
+			 // Only Checking accounts can clear checks
+		if(getaccountType().equals("Checking")) {
+			// Get readable date parts for display
+		    int curMonth = currentDate.get(Calendar.MONTH) + 1;
+		    int curDay = currentDate.get(Calendar.DAY_OF_MONTH);
+		    int curYear = currentDate.get(Calendar.YEAR);
+		    int checkMonth = check.getDateofCheck().get(Calendar.MONTH) + 1;
+		    int checkDay = check.getDateofCheck().get(Calendar.DAY_OF_MONTH);
+		    int checkYear = check.getDateofCheck().get(Calendar.YEAR);
+		    int staleMonth = sixMonthsAgo.get(Calendar.MONTH) + 1;
+		    int staleDay = sixMonthsAgo.get(Calendar.DAY_OF_MONTH);
+		    int staleYear = sixMonthsAgo.get(Calendar.YEAR);        
+		    if(getStatus().equals("Closed")) {
+		    	String reason = "Error: Account Number : " + ticket.getAccountnumber()+ " is CLOSED";
+		    		receipt = new TransactionReceipt(ticket, false, reason, preTransaction, preTransaction, currentDate);
+		    		addtransactionReceipt(receipt); 
+		    		return receipt;
+		    	}else {
+					 // Check if the check is post-dated
+					if(check.getDateofCheck().after(currentDate)) {
+						String reason = "Error:Check not cleared - Post-dated check: " + checkMonth + "/" + checkDay + "/" + checkYear;
+					  	receipt = new TransactionReceipt(ticket, false, reason, preTransaction, preTransaction, currentDate);
+					    addtransactionReceipt(receipt); 
+					    return receipt; 
+						}else {
+						// Check if the check is stale (older than six months)
+						if(check.getDateofCheck().before(sixMonthsAgo)) {
+							String reason = "Error: Cannot clear stale check (older than 6 months). "
+		                           + "Check Date: " + checkMonth + "/" + checkDay + "/" + checkYear + ". "
+		                           + "Oldest Acceptable Date: " + staleMonth + "/" + staleDay + "/" + staleYear;
+						      receipt = new TransactionReceipt(ticket, false, reason, preTransaction, preTransaction, currentDate);
+						      addtransactionReceipt(receipt); 
+						      return receipt;
+						}
+						else {
+							if(preTransaction < check.getCheckAmount()) {
+								// Check for insufficient funds
+								double newBalance = preTransaction - 2.50;
+								setbalance(newBalance);
+								String reason = "Error: Insufficient funds. $2.50 service fee applied for bounced check - " 
+										+ "Old Balance : " + preTransaction+" | " + "New Balance : " + newBalance;
+							    receipt = new TransactionReceipt(ticket, false, reason, preTransaction, newBalance, currentDate);
+							    addtransactionReceipt(receipt);
+							    return receipt;
+							}else {
+								double newBalance = preTransaction - check.getCheckAmount();
+								setbalance(newBalance);
+								receipt = new TransactionReceipt(ticket, true, preTransaction, newBalance, currentDate);
+								addtransactionReceipt(receipt);
+								return receipt;
+							}
+						}
+					}
+				}
+			}else {
+				// Reject non-Checking accounts
+				String reason = "Error only Clear Checking Accounts. " + "Account Type : " + getaccountType();
+				receipt = new TransactionReceipt(ticket,false,reason,0,0,currentDate);
+				addtransactionReceipt(receipt); 
+				return receipt;
+		}
+	}
 }
