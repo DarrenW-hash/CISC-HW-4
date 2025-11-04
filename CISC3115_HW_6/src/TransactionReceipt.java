@@ -49,11 +49,36 @@ public class TransactionReceipt {
 	
 	//toString 
 	@Override
-	public String toString()	{
-		if(postTransactionMaturityDate != null) {
-			return ticket.toString() +  " " + TransactionSuccessIndicatorFlag + " " + ReasonForFailure + " " + PreTransactionBalance + " " + PostTransactionBalance + " " + postTransactionMaturityDate;
+	public String toString(){
+		StringBuilder sb = new StringBuilder();
+		if(TransactionSuccessIndicatorFlag == false) {
+			sb.append("Account Number " + ticket.getAccountnumber() + "\n");
+			sb.append("Reason : " + ReasonForFailure + "\n");
 		}else {
-			return ticket.toString() +  " " + TransactionSuccessIndicatorFlag + " " + ReasonForFailure + " " + PreTransactionBalance + " " + PostTransactionBalance;
+			switch(ticket.getTransaction()) {
+				case("WITHDRAWAL"):
+					sb.append(String.format("Account Number : %d%nWithdrawl Amount : %.2f%nOld Balance : %.2f%nNew Balance : %.2f",
+							ticket.getAccountnumber(),
+							ticket.getTransactionAmount(),
+							getPreTransactionBalance(),
+							getPostTransactionBalance()));
+					break;
+				case("DEPOSIT"):
+					sb.append(String.format("Account Number : %d%nDeposit Amount : %.2f%nOld Balance : %.2f%nNew Balance : %.2f",
+							ticket.getAccountnumber(),
+							ticket.getTransactionAmount(),
+							getPreTransactionBalance(),
+							getPostTransactionBalance()));
+					break;
+				case("Clear Check"):
+					sb.append(String.format("Account Number : %d%nAmount of Check:: %.2f%nOld Balance : %.2f%nNew Balance : %.2f",
+							ticket.getAccountnumber(),
+							ticket.getTransactionAmount(),
+							getPreTransactionBalance(),
+							getPostTransactionBalance()));
+					break;
+			}
 		}
+		return sb.toString();
 	}
 }

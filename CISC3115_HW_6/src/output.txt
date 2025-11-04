@@ -26,7 +26,6 @@ Malfoy       Draco        789654012    101112     Checking     Closed       82.6
 
 Transaction Type : Withdrawal 
 Account Number : 123456
-Account Type : Savings
 Withdrawl Amount : 100.00
 Old Balance : 300.80
 New Balance : 200.80
@@ -34,33 +33,32 @@ Account Status : Open
 
 Transaction Type : Withdrawal 
 Account Number : 875842
-Account Type : CD
 Withdrawl Amount : 200.00
 Old Balance : 1000.50
 New Balance : 800.50
-CD New Maturity Date: 11/03/27
+CD New Maturity Date : 11/03/27
 Account Status : Open
 
 Transaction Type : Withdrawal 
 Transaction Failed
 Account Type : Checking
-Account Number:  101112
-Reason: Error: Account Number 101112 is CLOSED
---------------------
+Account Number 101112
+Reason : Error: Account Number 101112 is CLOSED
+
 
 Transaction Type : Withdrawal 
 Transaction Failed
 Account Type : Savings
-Account Number:  223344
-Reason: Error: Insufficient funds. Withdrawal Amount: 10000.00. Current Balance: 9450.20
---------------------
+Account Number 223344
+Reason : Error: Insufficient funds. Withdrawal Amount: 10000.00. Current Balance: 9450.20
+
 
 Transaction Type : Withdrawal 
 Transaction Failed
 Account Type : Savings
-Account Number:  654321
-Reason: Error: Invalid Withdrawal input: -10.00
---------------------
+Account Number 654321
+Reason : Error: Invalid Withdrawal input: -10.00
+
 
 Transaction Type : Withdrawal 
 Transaction Failed
@@ -70,13 +68,12 @@ Error Account Number:157722 not found.
 Transaction Type : Withdrawal 
 Transaction Failed
 Account Type : CD
-Account Number:  222222
-Reason: Error: Maturity Date 11/25/2025 not reached 
---------------------
+Account Number 222222
+Reason : Error: Maturity Date 11/25/2025 not reached 
+
 
 Transaction Type : Withdrawal 
 Account Number : 333333
-Account Type : Checking
 Withdrawl Amount : 50.00
 Old Balance : 899.74
 New Balance : 849.74
@@ -84,7 +81,6 @@ Account Status : Open
 
 Transaction: Deposit
 Account Number : 199753
-Account Type : Checking
 Deposit Amount : 250.90
 Old Balance : 500.50
 New Balance : 751.40
@@ -92,16 +88,14 @@ Account Status : Open
 
 Transaction: Deposit
 Account Number : 234567
-Account Type : CD
 Deposit Amount : 20.20
 Old Balance : 500.00
 New Balance : 520.20
-CD New Maturity Date: 11/03/27
+CD New Maturity Date : 11/03/27
 Account Status : Open
 
 Transaction: Deposit
 Account Number : 123456
-Account Type : Savings
 Deposit Amount : 76.30
 Old Balance : 200.80
 New Balance : 277.10
@@ -110,9 +104,9 @@ Account Status : Open
 Transaction: Deposit
 Transaction Failed
 Account Type : Savings
-Account Number:  654321
-Reason: Error: Invalid Deposit input: -80.00
---------------------
+Account Number 654321
+Reason : Error: Invalid Deposit input: -80.00
+
 
 Transaction: Deposit
 Transaction Failed
@@ -132,27 +126,26 @@ ERROR Account not Found 765211
 Transaction: Clear Check
 Transaction Failed
 Account Type : Checking
-Account Number:  345678
-Reason: Error: Cannot clear stale check (older than 6 months). Check Date: 12/1/2002. Oldest Acceptable Date: 5/3/2025
---------------------
+Account Number 345678
+Reason : Error: Cannot clear stale check (older than 6 months). Check Date: 12/1/2002. Oldest Acceptable Date: 5/3/2025
+
 
 Transaction: Clear Check
 Transaction Failed
 Account Type : Savings
-Account Number:  785609
-Reason: Error only Clear Checking Accounts. Account Type : Savings
---------------------
+Account Number 785609
+Reason : Error only Clear Checking Accounts. Account Type : Savings
+
 
 Transaction: Clear Check
 Transaction Failed
 Account Type : Checking
-Account Number:  199753
-Reason: Error:Check not cleared - Post-dated check: 12/21/2025
---------------------
+Account Number 199753
+Reason : Error:Check not cleared - Post-dated check: 12/21/2025
+
 
 Transaction: Clear Check
 Account Number : 112233
-Account Type : Checking
 Amount of Check:: 120.00
 Old Balance : 1200.75
 New Balance : 1080.75
@@ -161,16 +154,16 @@ Account Status : Open
 Transaction: Clear Check
 Transaction Failed
 Account Type : Checking
-Account Number:  445566
-Reason: Error: Account Number : 445566 is CLOSED
---------------------
+Account Number 445566
+Reason : Error: Account Number : 445566 is CLOSED
+
 
 Transaction: Clear Check
 Transaction Failed
 Account Type : Checking
-Account Number:  778899
-Reason: Error: Insufficient funds. $2.50 service fee applied for bounced check - Old Balance : 678.25 | New Balance : 675.75
---------------------
+Account Number 778899
+Reason : Error: Insufficient funds. $2.50 service fee applied for bounced check - Old Balance : 678.25 | New Balance : 675.75
+
 
 
 Ending Program

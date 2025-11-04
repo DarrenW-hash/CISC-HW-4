@@ -117,4 +117,35 @@ public class Bank {
 			return bankAccounts.get(index).clearCheck(ticket,checkDate);
 		}
 	}
+	/*Creates a new account in the bank if it passes all validations.
+	 * Performs checks for duplicate account Numbers, valid account types
+	 * valid SSN, and account number ranges, Returns a TransactionReceipt
+	 * indicating success or failure
+	 */
+	public TransactionReceipt makeNewAcct(Accounts account)	{
+		int accountNumber  = account.getAccountNumber();
+		Calendar time = Calendar.getInstance();
+		int index  = findAcct(accountNumber);
+		int SSnumber = Integer.parseInt(account.getdepositor().getSSnumber());
+		//check if account number already exist
+		if(index != -1)	{
+			String ReasonforFailure = "Error Account Number " + accountNumber + " already EXIST.";
+			TransactionTicket ticket = new TransactionTicket(accountNumber, time, "New Account", 0.0, 0);
+			TransactionReceipt receipt = new TransactionReceipt(ticket, false, ReasonforFailure, 0.0,0.0, Calendar.getInstance());
+			return receipt;
+		}else {
+			//validate accountype
+			if(account.getaccountType().equals("Saving") || account.getaccountType().equals("Checking") || account.getaccountType().equals("CD"))  {
+				//validate if accountnumber is within range
+				if(account.getAccountNumber() >= 1000000 && account.getAccountNumber() <= 999999) {
+					//validate ssn number 
+					if(SSnumber >= 100000000 && SSnumber <= 999999999 )	{
+						bankAccounts.add(account);
+						TransactionTicket ticket = new TransactionTicket(accountNumber, time, "New Account", 0.0,0);
+						TransactionReceipt receipt = new TransactionReceipt(ticket, true, 0.0, 0.0, time);
+					}
+				}
+			}
+		}
+	}
 }
