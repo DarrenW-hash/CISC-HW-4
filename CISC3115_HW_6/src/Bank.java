@@ -117,34 +117,105 @@ public class Bank {
 			return bankAccounts.get(index).clearCheck(ticket,checkDate);
 		}
 	}
-	/*Creates a new account in the bank if it passes all validations.
-	 * Performs checks for duplicate account Numbers, valid account types
-	 * valid SSN, and account number ranges, Returns a TransactionReceipt
-	 * indicating success or failure
-	 */
-	public TransactionReceipt makeNewAcct(Accounts account)	{
-		int accountNumber  = account.getAccountNumber();
+	/* Creates a new account in the bank if it passes all validations.
+	 * Performs checks for duplicate account numbers, valid account types,
+	 * valid SSN, and account number ranges. Returns a TransactionReceipt
+	 * indicating success or failure.
+	 */	
+	public TransactionReceipt makeNewAcct(Accounts account) {
+		int accountNumber = account.getAccountNumber();
 		Calendar time = Calendar.getInstance();
-		int index  = findAcct(accountNumber);
+		int index = findAcct(accountNumber);
 		int SSnumber = Integer.parseInt(account.getdepositor().getSSnumber());
-		//check if account number already exist
-		if(index != -1)	{
-			String ReasonforFailure = "Error Account Number " + accountNumber + " already EXIST.";
-			TransactionTicket ticket = new TransactionTicket(accountNumber, time, "New Account", 0.0, 0);
-			TransactionReceipt receipt = new TransactionReceipt(ticket, false, ReasonforFailure, 0.0,0.0, Calendar.getInstance());
-			return receipt;
+			
+		// Check if account number already exists
+		if(index != -1) {
+			String ReasonforFailure = "Error Account Number " + accountNumber + " Exist.";
+			TransactionTicket ticket = new TransactionTicket(accountNumber,time,"New Account",0.0,0);
+			TransactionReceipt Receipt = new TransactionReceipt(ticket,false,ReasonforFailure,0.0,0.0,Calendar.getInstance());
+			return Receipt;
 		}else {
-			//validate accountype
+			// Validate account type
 			if(account.getaccountType().equals("Saving") || account.getaccountType().equals("Checking") || account.getaccountType().equals("CD"))  {
-				//validate if accountnumber is within range
-				if(account.getAccountNumber() >= 1000000 && account.getAccountNumber() <= 999999) {
-					//validate ssn number 
-					if(SSnumber >= 100000000 && SSnumber <= 999999999 )	{
+				// Validate account number range (6-digit numbers)
+				if(account.getAccountNumber() >= 100000 && account.getAccountNumber() <= 999999) {
+					// Validate SSN (9-digit numbers)
+					if(SSnumber >= 100000000 && SSnumber <= 999999999) {
 						bankAccounts.add(account);
-						TransactionTicket ticket = new TransactionTicket(accountNumber, time, "New Account", 0.0,0);
-						TransactionReceipt receipt = new TransactionReceipt(ticket, true, 0.0, 0.0, time);
+						TransactionTicket ticket = new TransactionTicket(accountNumber, time,"New Account", 0,0) ;
+						TransactionReceipt Receipt = new TransactionReceipt(ticket, true, 0.0,0.0,time);
+						return Receipt;
+					}else {
+						// Invalid SSN
+						String ReasonforFailure = "Error INVALID SSN : " + account.getdepositor().getSSnumber();
+						TransactionTicket ticket = new TransactionTicket(accountNumber,time,"New Account",0.0,0);
+						TransactionReceipt Receipt = new TransactionReceipt(ticket,false,ReasonforFailure,0.0,0.0,Calendar.getInstance());
+						return Receipt;
 					}
+				}else {
+					// Invalid account number range
+					String ReasonforFailure = "Error INVALID ACCOUNT NUMBER RANGE : " + account.getAccountNumber();
+					TransactionTicket ticket = new TransactionTicket(accountNumber,time,"New Account",0.0,0);
+					TransactionReceipt Receipt = new TransactionReceipt(ticket,false,ReasonforFailure,0.0,0.0,Calendar.getInstance());
+					return Receipt;
 				}
+						
+			}else {
+				// Invalid account type
+				String ReasonforFailure = "Error INVALID ACCOUNT TYPE of : " + account.getaccountType();
+				TransactionTicket ticket = new TransactionTicket(accountNumber,time,"New Account",0.0,0);
+				TransactionReceipt Receipt = new TransactionReceipt(ticket,false,ReasonforFailure,0.0,0.0,Calendar.getInstance());
+				return Receipt;
+			}
+		}
+	}
+	/* Closes a specific bank account based on the account number provided.
+	 * Finds the account by account number, and if found, delegates the closing
+	 * operation to the Account object. If the account is not found, returns a failure receipt.
+	 */
+	public TransactionReceipt closeAcct(TransactionTicket ticket, int accountNumber) {
+		int index = findAcct(accountNumber);
+		if(index == -1) {
+			String ReasonforFailure = "Error Account Number " + accountNumber + " not found.";
+			TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonforFailure, 0.0, 0.0, Calendar.getInstance());
+			return Receipt;
+				}else {
+					return bankAccounts.get(index).closeAcct(ticket);
+		}
+	}
+	/* Reopens a previously closed bank account based on the account number provided.
+	 * Finds the account by account number, and if found, delegates the reopening
+	 * operation to the Account object. If the account is not found, returns a failure receipt.
+	 */
+	public TransactionReceipt openAcct(TransactionTicket ticket, int accountNumber) {
+		int index = findAcct(accountNumber);
+		if(index == -1) {
+			String ReasonforFailure = "Error Account Number " + accountNumber + " not found.";
+			TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonforFailure, 0.0, 0.0, Calendar.getInstance());
+			return Receipt;
+				}else {
+					return bankAccounts.get(index).openAcct(ticket);
+			}	
+		}
+	/* Deletes a bank account if it exists and has a zero balance.
+	 * Finds the account by account number, validates balance, and removes it from the bank's list.
+	 * Returns a TransactionReceipt indicating success or failure.
+	 */
+	public TransactionReceipt deleteAcct(TransactionTicket ticket, int accountNumber) {
+		int index = findAcct(accountNumber);
+		if(index == -1) {
+			String ReasonforFailure = "Error Account Number " + accountNumber + " not found.";
+			TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonforFailure, 0, 0.0, Calendar.getInstance());
+			return Receipt;
+			}else {
+				if(bankAccounts.get(index).getbalance() > 0) {
+					String ReasonforFailure = "Error Account Number " + accountNumber + " has a balance of " + bankAccounts.get(index).getbalance();
+					TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonforFailure, 0, 0.0, Calendar.getInstance());
+					return Receipt;
+				}else {
+					bankAccounts.remove(index);
+					TransactionReceipt Receipt = new TransactionReceipt(ticket, true, 0.0,0.0,Calendar.getInstance());
+					return Receipt;
 			}
 		}
 	}

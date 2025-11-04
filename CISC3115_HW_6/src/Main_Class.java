@@ -10,11 +10,11 @@ public class Main_Class {
 
 	public static void main (String args []	) throws IOException {
 		//mac files
-		//File inputFile = new File("/Users/darrenweng/git/CISC-HW-6/CISC3115_HW_6/src/input.txt");
-		//PrintWriter outputWriter = new PrintWriter("/Users/darrenweng/git/CISC-HW-6/CISC3115_HW_6/src/output.txt");
+		File inputFile = new File("/Users/darrenweng/git/CISC-HW-6/CISC3115_HW_6/src/input.txt");
+		PrintWriter outputWriter = new PrintWriter("/Users/darrenweng/git/CISC-HW-6/CISC3115_HW_6/src/output.txt");
 		//windows files
-		File inputFile = new File("C:\\Users\\dweng\\git\\CISC-HW-4\\CISC3115_HW_6\\src\\input.txt");
-		PrintWriter outputWriter = new PrintWriter("C:\\Users\\dweng\\git\\CISC-HW-4\\CISC3115_HW_6\\src\\output.txt");
+		//File inputFile = new File("C:\\Users\\dweng\\git\\CISC-HW-4\\CISC3115_HW_6\\src\\input.txt");
+		//PrintWriter outputWriter = new PrintWriter("C:\\Users\\dweng\\git\\CISC-HW-4\\CISC3115_HW_6\\src\\output.txt");
 		String userchoice; 
 		Scanner userinput = new Scanner(inputFile);
 		Bank bank = new Bank();
@@ -43,36 +43,36 @@ public class Main_Class {
 				case("c"):
 					clearCheck(bank, userinput, outputWriter);
 					break;
-//				case("N"):
-//				case("n"):
-//					outputWriter.println("Transaction: New Account");
-//					newAccount(bank, userinput, outputWriter);
-//					break;
-//				case("I"):
-//				case("i"):
-//					outputWriter.println("Transaction: Account Info");
-//					acctInfo(bank, userinput, outputWriter);
-//					break;
-//				case("H"):
-//				case("h"):
-//					outputWriter.println("Transaction: Account Info With Transaction History");
-//					acctInfoHistory(bank, userinput, outputWriter);
-//					break;
-//				case("S"):
-//				case("s"):
-//					outputWriter.println("Transaction: Close Account");
-//					closeAcct(bank, userinput, outputWriter);
-//					break;
-//				case("R"):
-//				case("r"):
-//					outputWriter.println("Transaction: Reopen Account");
-//					reopenAcct(bank, userinput, outputWriter);
-//					break;
-//				case("X"):
-//				case("x"):
-//					outputWriter.println("Transaction: Delete Account");
-//					deleteAcct(bank, userinput, outputWriter);
-//					break;
+				case("N"):
+				case("n"):
+					outputWriter.println("Transaction: New Account");
+					newAccount(bank, userinput, outputWriter);
+					break;
+				case("I"):
+				case("i"):
+					outputWriter.println("Transaction: Account Info");
+					acctInfo(bank, userinput, outputWriter);
+					break;
+				case("H"):
+				case("h"):
+					outputWriter.println("Transaction: Account Info With Transaction History");
+					acctInfoHistory(bank, userinput, outputWriter);
+					break;
+				case("S"):
+				case("s"):
+					outputWriter.println("Transaction: Close Account");
+					closeAcct(bank, userinput, outputWriter);
+					break;
+				case("R"):
+				case("r"):
+					outputWriter.println("Transaction: Reopen Account");
+					reopenAcct(bank, userinput, outputWriter);
+					break;
+				case("X"):
+				case("x"):
+					outputWriter.println("Transaction: Delete Account");
+					deleteAcct(bank, userinput, outputWriter);
+					break;
 				case("Q"):
 				case("q"):
 					outputWriter.println();
@@ -344,41 +344,318 @@ public class Main_Class {
 	   	TransactionTicket ticket = new TransactionTicket(accountNumber, time, "Clear Check", amount,0);			TransactionReceipt receipt = bank.clearCheck(ticket, accountNumber, checkDate);
 		printTransactionReceipt(bank,outputWriter,receipt);
 	}
-	/*Creates a new bank account(Checking, Saving, CD) and adds it to the bank.
-	 *Prompts the user for personal and account information, constructs the appropriate
-	 *Account object, and delegates account creation to the Bank Class.
+	/* Creates a new bank account (Checking, Savings, or CD) and adds it to the bank.
+	 * Prompts the user for personal and account information, constructs the appropriate
+	 * Account object, and delegates account creation to the Bank class.
 	 */
-	public static void newAccount(Bank bank, Scanner userinput, PrintWriter outputWriter)	{
+	public static void newAccount(Bank bank, Scanner userInput, PrintWriter outputWriter) {
 		ArrayList<Accounts>accounts = bank.getbankAccounts();
-		outputWriter.println("Transaction : New Account");
-		System.out.println("Enter First Name : ");
-		String firstName = userinput.next();
-		System.out.println("Enter Last Name : ");
-		String lastName = userinput.next();
-		System.out.println("Enter SSN : ");
-		String ssn = userinput.next();
-		System.out.println("Enter Account Number : ");
-		int accountNum = userinput.nextInt();
-		System.out.println("Enter Account Type (Checking, Savings, CD) : ");
-		String accountType = userinput.next();
+		System.out.println("Enter First Name: ");
+		String firstName = userInput.next();
+		System.out.println("Enter Last Name: ");
+		String lastName = userInput.next();
+		System.out.println("Enter SSN: ");
+		String ssn = userInput.next();
+		System.out.println("Enter Account Number: ");
+		int accountNumber = userInput.nextInt();
+		System.out.println("Enter Account Type (Checking, Savings, CD): ");
+		String accountType = userInput.next();
 		System.out.println("Enter Account Status (Open/Closed): ");
-		String status = userinput.next();
-		Name name = new Name(firstName,lastName);
-		Depositors d  = new Depositors(name, ssn);
+		String status = userInput.next();
+		Name name = new Name(firstName, lastName);
+		Depositors d = new Depositors(name, ssn);
 		Calendar maturityDate = null;
-		if(accountType.equals("CD")) {
-			//prompts for maturity date if new account is Certificate of Deposit
+		if (accountType.equalsIgnoreCase("CD")) {
+			// Prompt for maturity date only if the new account is a Certificate of Deposit
 			maturityDate = Calendar.getInstance();
-			System.out.println("Enter Maturity Date (MM DD YYYY) : ");
-			int month = userinput.nextInt();
-			int day = userinput.nextInt();
-			int year = userinput.nextInt();
-			//adjust for zero-based months in Calendar
-			maturityDate.set(year, month -1 , day);
-			
-			Accounts newaccount = new Accounts(d, accountNum,accountType, 0.0 , status,maturityDate);
-			TransactionReceipt receipt = bank.make
+			System.out.println("Enter Maturity Date (MM DD YYYY): ");
+			int month = userInput.nextInt();
+			int day = userInput.nextInt();
+			int year = userInput.nextInt();
+			// Adjust for zero-based months in Calendar
+			maturityDate.set(year, month - 1, day);    
+		    Accounts newAccount = new Accounts(d,accountNumber,accountType,0.0, status, maturityDate);
+		        TransactionReceipt receipt = bank.makeNewAcct(newAccount);
+		        if(receipt.getTransactionSuccessIndicatorFlag() == false) {
+		        	outputWriter.println("Transaction Failed");
+		        	outputWriter.println("ERROR New Account failed : "+ receipt.getTransactionFailureReason());
+		        	outputWriter.println("--------------------");
+			    	outputWriter.println();
+		        }else {
+		        	// Print success message including maturity date	
+		        	outputWriter.printf("Account Number : %d%nAccount Type : %s%nSSN : %s%nAccount Status : %s%nMaturity Date : %tD%n", 
+		        			receipt.getTransactionTicket().getAccountnumber(),
+		        			accountType,
+		        			ssn,
+		        			status,
+		        			maturityDate);
+		        	outputWriter.println();
+		        }
+
+		    }else {
+		    	// Create a non-CD account (Checking or Savings) with default balance = 0.0
+			    Accounts newAccount = new Accounts(d, accountNumber,accountType,0.0, status);
+			    TransactionReceipt receipt = bank.makeNewAcct(newAccount);
+			    // Handle success or failure messages
+			    if(receipt.getTransactionSuccessIndicatorFlag() == false) {
+			    	outputWriter.println("Transaction Failed");
+		        	outputWriter.println("ERROR New Account failed : "+ receipt.getTransactionFailureReason());
+		        	outputWriter.println("--------------------");
+			    	outputWriter.println();
+		        }else {
+		        	// Print confirmation message for non-CD account
+		        	outputWriter.printf("Account Number : %d%nAccount Type : %s%nSSN : %s%nAccount Status : %s%n", 
+		        			receipt.getTransactionTicket().getAccountnumber(),
+		        			accountType,
+		        			ssn,
+		        			status);
+		        	outputWriter.println();
+		        }
+		    }
 		}
-		
+	/* Prints detailed account information for a customer based on their SSN.
+	 * Searches all accounts in the bank for matches to the provided SSN.
+	 * If matching accounts are found, displays depositor information and account details.
+	 * If no matching account exists, an error message is printed.
+	 */
+	public static void acctInfo(Bank bank, Scanner userInput, PrintWriter outputWriter) {
+		ArrayList<Accounts> accounts = bank.getbankAccounts();
+		System.out.print("SSN: ");
+		String socialSecurityNumber = userInput.next();
+		boolean found = false;
+		// Print headers once
+		outputWriter.printf("%-12s %-12s %-12s %-10s %-12s %-12s %-10s %-15s%n",
+				"First Name", "Last Name", "SSN", "Acct Num", "Acct Type", "Status", "Balance", "Maturity Date");
+
+		// Loop through accounts to find matching SSN
+		for (int i = 0; i < accounts.size(); i++) {
+			if (socialSecurityNumber.equals(accounts.get(i).getdepositor().getSSnumber())) {
+				found = true;
+				Accounts acc = accounts.get(i);
+				if (acc.getaccountType().equals("CD")) {
+					outputWriter.printf("%-12s %-12s %-12s %-10d %-12s %-12s %-10.2f %-15tD%n",
+							acc.getdepositor().getNames().getFirstName(),
+							acc.getdepositor().getNames().getLastName(),
+							acc.getdepositor().getSSnumber(),
+							acc.getAccountNumber(),
+							acc.getaccountType(),
+							acc.getStatus(),
+							acc.getbalance(),
+							acc.getDate());  // maturity date
+			     } else {
+			    	 outputWriter.printf("%-12s %-12s %-12s %-10d %-12s %-12s %-10.2f%n",
+			    			 acc.getdepositor().getNames().getFirstName(),
+			    			 acc.getdepositor().getNames().getLastName(),
+			    			 acc.getdepositor().getSSnumber(),
+			    			 acc.getAccountNumber(),
+			    			 acc.getaccountType(),
+			    			 acc.getStatus(),
+			    			 acc.getbalance());
+			        }
+			    }
+			}
+
+			// If no account matched the entered SSN
+			if (!found) {
+			    outputWriter.println();
+			    outputWriter.println("Transaction Failed");
+			    outputWriter.println("ERROR: Account not found for SSN " + socialSecurityNumber);
+			    outputWriter.println("--------------------");
+			}
+			outputWriter.println();
+		}
+	/* Prints the transaction history for a specific bank account based on SSN.
+	 * Searches all accounts in the bank for a matching SSN and prints all past transactions.
+	 * If no matching account exists or there are no transactions, appropriate messages are displayed 
+	 */
+		public static void acctInfoHistory(Bank bank, Scanner userInput, PrintWriter outputWriter) {
+			ArrayList<Accounts> accounts = bank.getbankAccounts();
+			System.out.print("SSN: ");
+			String socialSecurityNumber = userInput.next();
+
+			boolean found = false;
+
+			// Print headers once
+			outputWriter.printf("%-12s %-12s %-12s %-10s %-12s %-12s %-10s %-15s%n",
+			        "First Name", "Last Name", "SSN", "Acct Num", "Acct Type", "Status", "Balance", "Maturity Date");
+
+			// Loop through accounts to find matching SSN
+			for (int i = 0; i < accounts.size(); i++) {
+			    if (socialSecurityNumber.equals(accounts.get(i).getdepositor().getSSnumber())) {
+			    	int index = i;
+			        found = true;
+			        Accounts acc = accounts.get(i);
+
+			        if (acc.getaccountType().equals("CD")) {
+			            outputWriter.printf("%-12s %-12s %-12s %-12d %-12s %-12s %-12.2f %-12tD%n",
+			                    acc.getdepositor().getNames().getFirstName(),
+			                    acc.getdepositor().getNames().getLastName(),
+			                    acc.getdepositor().getSSnumber(),
+			                    acc.getAccountNumber(),
+			                    acc.getaccountType(),
+			                    acc.getStatus(),
+			                    acc.getbalance(),
+			                    acc.getDate());  // maturity date
+			            if (acc.gettransactionRecipts().isEmpty()) {
+						    outputWriter.println("No transactions yet.");
+						}else {
+							outputWriter.println("***** Account Transactions *****");
+							outputWriter.printf("Account Type: %-12s Transaction Type : %-12s Amount: $%-8.2f Success: %-5b Reason for Failure : %-12s%n",
+						               acc.getaccountType(),
+						               "OPEN NEW ACCOUNT",
+						               acc.gettransactionRecipts().get(0).getPreTransactionBalance(),
+						               true,
+						               "null");
+							for (TransactionReceipt receipt : acc.gettransactionRecipts()) {
+						        TransactionTicket ticket = receipt.getTransactionTicket();   
+						        outputWriter.printf("Account Type: %-12s Transaction Type : %-16s Amount: $%-8.2f Success: %-5b Reason for Failure : %-12s%n",
+						                accounts.get(i).getaccountType(),
+						                ticket.getTransaction(),
+						                ticket.getTransactionAmount(),
+						                receipt.getTransactionSuccessIndicatorFlag(),
+						        		receipt.getTransactionFailureReason());
+						    }
+						}
+			        	outputWriter.println();
+			            
+			        } else {
+			            outputWriter.printf("%-12s %-12s %-12s %-12d %-12s %-12s %-12.2f%n",
+			                    acc.getdepositor().getNames().getFirstName(),
+			                    acc.getdepositor().getNames().getLastName(),
+			                    acc.getdepositor().getSSnumber(),
+			                    acc.getAccountNumber(),
+			                    acc.getaccountType(),
+			                    acc.getStatus(),
+			                    acc.getbalance());
+			            if (acc.gettransactionRecipts().isEmpty()) {
+			            	outputWriter.println("No transactions yet.");
+						    
+						}else {
+							outputWriter.println("***** Account Transactions *****");
+							outputWriter.printf("Account Type: %-12s Transaction Type : %-12s Amount: $%-8.2f Success: %-5b Reason for Failure : %-12s%n",
+									acc.getaccountType(),
+						               "OPEN NEW ACCOUNT",
+						               acc.gettransactionRecipts().get(0).getPreTransactionBalance(),
+						               true,
+						               "null");
+					    }
+							for (TransactionReceipt receipt : acc.gettransactionRecipts()) {
+						        TransactionTicket ticket = receipt.getTransactionTicket();   
+						        outputWriter.printf("Account Type: %-12s Transaction Type : %-16s Amount: $%-8.2f Success: %-5b Reason for Failure : %-12s%n",
+						                accounts.get(i).getaccountType(),
+						                ticket.getTransaction(),
+						                ticket.getTransactionAmount(),
+						                receipt.getTransactionSuccessIndicatorFlag(),
+						        		receipt.getTransactionFailureReason());
+						    }
+						}
+			        	outputWriter.println();
+			        }	
+			    }
+			
+			// If no account matched the entered SSN
+			if (!found) {
+			    outputWriter.println();
+			    outputWriter.println("Transaction Failed");
+			    outputWriter.println("ERROR: Account not found for SSN " + socialSecurityNumber);
+			    outputWriter.println("--------------------");
+			}
+			outputWriter.println();
+		}
+	/* Closes a specific bank account based on the account number entered by the user.
+	 * Creates a "Close Account" transaction, requests the Bank to process it,
+	 * and prints the updated account status or an error message if the account is not found.
+	 */
+		public static void closeAcct(Bank bank, Scanner userinput, PrintWriter outputWriter) {
+			ArrayList<Account>accounts = bank.getAccounts();
+			Calendar time = Calendar.getInstance();
+			// Prompt user to enter the account number to close
+			System.out.println("Enter Account Number : ");
+			int acctNum = userinput.nextInt();
+			TransactionTicket ticket = new TransactionTicket(acctNum, time, "Close Account",0,0);
+			TransactionReceipt receipt = bank.closeAcct(ticket, acctNum);
+			int index = bank.getindex();
+			
+			 // If the account exists, print the account number, type, and updated status
+			if(index != -1) {
+				if (receipt.getTransactionSuccessIndicatorFlag() == false){
+					outputWriter.println("Transaction Failed");
+			    	outputWriter.println(receipt.getTransactionFailureReason());
+			    	outputWriter.println("--------------------");
+			    	outputWriter.println();
+				}else {
+					outputWriter.printf("Account Number : %d%nAccount Type : %s%nAccount Status : Now %s%n", 
+							accounts.get(index).getAccountNumber(),
+							accounts.get(index).getaccountType(),
+							accounts.get(index).getAccountStatus());
+					outputWriter.println();
+				}
+			}else {
+				// If account number is not found, print an error message
+		    	outputWriter.println("Transaction Failed");
+		    	outputWriter.println("ERROR Account not Found " + acctNum);
+		    	outputWriter.println("--------------------");
+		    	outputWriter.println();
+		    }
+		    
+		}
+	/* Reopens a previously closed bank account based on the account number entered by the user.
+	 * Creates an "Open Account" transaction, requests the Bank to process it,
+	 * and prints the updated account status or an error message if the account is not found.
+	 */
+		public static void reopenAcct(Bank bank, Scanner userinput, PrintWriter outputWriter) {
+			ArrayList<Account>accounts = bank.getAccounts();
+			Calendar time = Calendar.getInstance();
+			 // Prompt user to enter the account number to reopen
+			System.out.println("Enter Account Number : ");
+			int acctNum = userinput.nextInt();
+			TransactionTicket ticket = new TransactionTicket(acctNum, time, "Open Account",0,0);
+			TransactionReceipt receipt = bank.openAcct(ticket, acctNum);
+			int index = bank.getindex();
+			if(index != -1) {
+				if (receipt.getTransactionSuccessIndicatorFlag() == false){
+					outputWriter.println("Transaction Failed");
+			    	outputWriter.println("ERROR Account" + acctNum + " " + receipt.getTransactionFailureReason());
+			    	outputWriter.println("--------------------");
+			    	outputWriter.println();
+				}else {
+					outputWriter.printf("Account Number : %d%nAccount Type : %s%nAccount Status : Now %s%n", 
+							accounts.get(index).getAccountNumber(),
+							accounts.get(index).getaccountType(),
+							accounts.get(index).getAccountStatus());
+					outputWriter.println();
+				}
+			}else {
+				// If account number is not found, print an error message
+		    	outputWriter.println("Transaction Failed");
+		    	outputWriter.println("ERROR Account not Found " + acctNum);
+		    	outputWriter.println("--------------------");
+		    	outputWriter.println();
+			} 
+		}
+	/* Deletes a specific bank account based on the account number entered by the user.
+	 * Creates a "Delete Account" transaction, requests the Bank to process it,
+	 * and prints an error message if the deletion fails.
+	 */
+		public static void deleteAcct(Bank bank, Scanner userinput, PrintWriter outputWriter) {
+			ArrayList<Account>accounts = bank.getAccounts();
+			Calendar time = Calendar.getInstance();
+			 // Prompt user to enter the account number to delete
+			System.out.println("Enter Account Number : ");
+			int accountNumber = userinput.nextInt();
+			TransactionTicket ticket = new TransactionTicket(accountNumber, time, "Delete Account",0,0);
+			TransactionReceipt receipt = bank.deleteAcct(ticket, accountNumber);
+			// If the deletion failed, print the failure message
+			if(receipt.getTransactionSuccessIndicatorFlag() == false) {
+				outputWriter.println("Transaction Failed");
+				outputWriter.println(receipt.getTransactionFailureReason());
+				outputWriter.println("--------------------");
+		    	outputWriter.println();
+				}
+			else {
+					outputWriter.println("Account Number " +ticket.getAccountnumber() + " has been DELETED");
+				   	outputWriter.println();
+			
+		}
 	}
 }

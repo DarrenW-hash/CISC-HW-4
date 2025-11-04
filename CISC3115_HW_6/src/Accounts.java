@@ -333,4 +333,45 @@ public class Accounts {
 				return receipt;
 		}
 	}
+	/* Closes the account if it is currently open.
+	 * Validates the current account status and updates it to "Closed" if allowed.
+	 * Records the transaction in the account’s transaction history.
+	 */
+	public TransactionReceipt closeAcct(TransactionTicket ticket) {
+		TransactionReceipt receipt;
+		Calendar currentDate = Calendar.getInstance();
+			
+		if(getStatus().equals("Closed")) {
+			String reason = "Error: Account Number : " + ticket.getAccountnumber()+ " is Already CLOSED";
+			receipt = new TransactionReceipt(ticket, false, reason, 0, 0, currentDate);
+			addtransactionReceipt(receipt); 
+			return receipt;
+				}else {
+					setAccountStatus("Closed");
+					receipt = new TransactionReceipt(ticket, true,0,0, currentDate);
+					addtransactionReceipt(receipt);
+					return receipt;
+				
+			}
+		}
+	/* Reopens the account if it is currently closed.
+	 * Validates the current account status and updates it to "Open" if allowed.
+	 * Records the transaction in the account’s transaction history.
+	 */
+	public TransactionReceipt openAcct(TransactionTicket ticket) {
+		TransactionReceipt receipt;
+		Calendar currentDate = Calendar.getInstance();
+			
+		if(getStatus().equals("Open")) {
+			String reason = "Error: Account Number : " + ticket.getAccountnumber()+ " is Already Open";
+			receipt = new TransactionReceipt(ticket, false, reason, 0, 0, currentDate);
+			addtransactionReceipt(receipt); 
+			return receipt;
+				}else {
+					setAccountStatus("Open");
+					receipt = new TransactionReceipt(ticket, true,0,0, currentDate);
+					addtransactionReceipt(receipt);
+					return receipt;
+		}
+	}
 }
