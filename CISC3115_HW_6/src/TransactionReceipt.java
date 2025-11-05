@@ -26,7 +26,15 @@ public class TransactionReceipt {
 		this.ReasonForFailure = ReasonForFailure;
 		this.postTransactionMaturityDate = postTransactionMaturityDate;
 	}
-	
+	//copy constructor
+	public TransactionReceipt(TransactionReceipt other) {
+	    this.ticket = new TransactionTicket(other.ticket); 
+	    this.TransactionSuccessIndicatorFlag = other.TransactionSuccessIndicatorFlag;
+	    this.ReasonForFailure = other.ReasonForFailure;
+	    this.PreTransactionBalance = other.PreTransactionBalance;
+	    this.PostTransactionBalance = other.PostTransactionBalance;
+	    this.postTransactionMaturityDate = (Calendar) other.postTransactionMaturityDate.clone();
+	}
 	//getters 
 	public TransactionTicket getTransactionTicket() {
 		return ticket;
@@ -52,31 +60,40 @@ public class TransactionReceipt {
 	public String toString(){
 		StringBuilder sb = new StringBuilder();
 		if(TransactionSuccessIndicatorFlag == false) {
+			sb.append("Transaction Failed \n");
 			sb.append("Account Number " + ticket.getAccountnumber() + "\n");
 			sb.append("Reason : " + ReasonForFailure + "\n");
 		}else {
 			switch(ticket.getTransaction()) {
 				case("WITHDRAWAL"):
-					sb.append(String.format("Account Number : %d%nWithdrawl Amount : %.2f%nOld Balance : %.2f%nNew Balance : %.2f",
-							ticket.getAccountnumber(),
-							ticket.getTransactionAmount(),
+					sb.append(ticket.toString());
+					sb.append(String.format("Old Balance : %.2f%nNew Balance : %.2f",
 							getPreTransactionBalance(),
 							getPostTransactionBalance()));
 					break;
 				case("DEPOSIT"):
-					sb.append(String.format("Account Number : %d%nDeposit Amount : %.2f%nOld Balance : %.2f%nNew Balance : %.2f",
-							ticket.getAccountnumber(),
-							ticket.getTransactionAmount(),
+					sb.append(ticket.toString());
+					sb.append(String.format("Old Balance : %.2f%nNew Balance : %.2f",
 							getPreTransactionBalance(),
 							getPostTransactionBalance()));
 					break;
 				case("Clear Check"):
-					sb.append(String.format("Account Number : %d%nAmount of Check:: %.2f%nOld Balance : %.2f%nNew Balance : %.2f",
-							ticket.getAccountnumber(),
-							ticket.getTransactionAmount(),
+					sb.append(ticket.toString());
+					sb.append(String.format("Old Balance : %.2f%nNew Balance : %.2f",
 							getPreTransactionBalance(),
 							getPostTransactionBalance()));
 					break;
+				case("Close Account"):
+					sb.append(ticket.toString());
+					sb.append("Account Status : Now Closed");
+					break;
+				case("Open Account"):
+					sb.append(ticket.toString());
+					sb.append("Account Status : Now Open");
+					break;
+				case("Delete Account"):
+					sb.append("Account Number " +ticket.getAccountnumber() + " has been DELETED \n");
+					
 			}
 		}
 		return sb.toString();

@@ -12,7 +12,7 @@ public class Bank {
 	private int index;
 	private static double totalAmountInSavingAccts;
 	private static double totalAmountInCheckingAccts;
-	private static double tatalAmountInCDAccts;
+	private static double totalAmountInCDAccts;
 	private static double totalAmountInAllAccts;
 	
 	
@@ -20,13 +20,6 @@ public class Bank {
 		bankAccounts = new ArrayList<>();
 	}
 	
-	//copy constructor
-	Bank(Bank other)	{
-		this.bankAccounts = new ArrayList<>();
-		for(Accounts a : other.bankAccounts) {
-			this.bankAccounts.add(new Accounts(a));
-		}
-	}
 	
 	//getter 
 	public ArrayList<Accounts> getbankAccounts()	{
@@ -37,11 +30,25 @@ public class Bank {
 		}
 		return copylist;
 	}
+	// getters for totals
+	public static double getTotalSavings() {
+		return totalAmountInSavingAccts; }
+	
+	public static double getTotalChecking() {
+		return totalAmountInCheckingAccts; }
+	
+	public static double getTotalCD() { 
+		return totalAmountInCDAccts; }
+	
+	public static double getTotalAll() { 
+		return totalAmountInAllAccts; }
+	
 	public void setindex(int i)	{
 		index = i;
 	}
+	
 	public void addAccounts(Accounts Acc)	{
-		System.out.println("Added Account");
+		//System.out.println("Added Account");
 		bankAccounts.add(Acc);
 	}
 	private int findAcct(int accNum)	{
@@ -72,6 +79,7 @@ public class Bank {
 			TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonForFailure, 0.0, 0.0, Calendar.getInstance());
 			return Receipt;
 		}else {
+			System.out.println("Debug: " + getbankAccounts().get(index).getaccountType() + " " + ticket.getTransactionAmount());
 			return bankAccounts.get(index).makeWithDrawal(ticket, userinput);
 		}
 	}
@@ -86,6 +94,7 @@ public class Bank {
 			TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonforFailure, 0.0, 0.0, Calendar.getInstance());
 			return Receipt;
 		}else {
+			System.out.println("Debug: " + getbankAccounts().get(index).getaccountType() + " " + ticket.getTransactionAmount());
 			return bankAccounts.get(index).makedeposit(ticket ,userinput );
 		}
 	}
@@ -114,6 +123,7 @@ public class Bank {
 			TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonforFailure, 0.0, 0.0, Calendar.getInstance());
 			return Receipt;
 		}else {
+			System.out.println("Debug: " + getbankAccounts().get(index).getaccountType() + " " + ticket.getTransactionAmount());
 			return bankAccounts.get(index).clearCheck(ticket,checkDate);
 		}
 	}
@@ -219,4 +229,26 @@ public class Bank {
 			}
 		}
 	}
+	
+	public static void recalcTotals(ArrayList<Accounts> accounts) {
+	    for (Accounts acc : accounts) {
+	        double balance = acc.getbalance();
+	        String type = acc.getaccountType();
+
+	        switch(type) {
+	            case "Savings":
+	                totalAmountInSavingAccts += balance;
+	                break;
+	            case "Checking":
+	                totalAmountInCheckingAccts += balance;
+	                break;
+	            case "CD":
+	                totalAmountInCDAccts += balance;
+	                break;
+	        }
+	        totalAmountInAllAccts += balance;
+	    }
+	    System.out.printf("%.2f",totalAmountInAllAccts);
+	}
+	
 }

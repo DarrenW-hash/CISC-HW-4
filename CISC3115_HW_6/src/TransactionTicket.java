@@ -13,6 +13,14 @@ public class TransactionTicket {
 		this.amountofTransaction = amountofTransaction;
 		this.termofCD = termofCD;
 	}
+	//copy constructor 
+	public TransactionTicket(TransactionTicket other) {
+	    this.accountNumber = other.accountNumber;
+	    this.dateofTransaction = (Calendar) other.dateofTransaction.clone();
+	    this.typeofTransaction = other.typeofTransaction;
+	    this.amountofTransaction = other.amountofTransaction;
+	    this.termofCD = other.termofCD;
+	}
 	
 	public Calendar getDateofTransaction() {
 		return dateofTransaction;
@@ -32,6 +40,32 @@ public class TransactionTicket {
 	//toString
 	@Override
 	public String toString()	{
-		return accountNumber + " " + dateofTransaction + " " + typeofTransaction + " " + amountofTransaction + " " + termofCD;
+		StringBuilder sb = new StringBuilder();
+		switch(typeofTransaction) {
+			case("WITHDRAWAL"):
+				sb.append(String.format("Account Number : %d%nWithdrawal Amount : %.2f%n", 
+						getAccountnumber(),
+						getTransactionAmount()));
+				break;
+			case("DEPOSIT"):
+				sb.append(String.format("Account Number : %d%nDeposit Amount : %.2f%n", 
+						getAccountnumber(),
+						getTransactionAmount()));
+				break;
+			case("Clear Check"):
+				sb.append(String.format("Account Number : %d%nDeposit Amount : %.2f%n", 
+						getAccountnumber(),
+						getTransactionAmount()));
+				break;
+			case("Close Account"):
+				sb.append(String.format("Account Number : %d%n", 
+						getAccountnumber()));
+				break;
+			case("Open Account"):
+				sb.append(String.format("Account Number : %d%n", 
+						getAccountnumber()));
+				break;
+		}
+		return sb.toString();
 	}
 }

@@ -45,6 +45,17 @@ public class Accounts {
 		}else {
 			this.date = null;
 		}
+		
+		// deep copy transaction receipts
+	    this.transactionReceipts = new ArrayList<>();
+	    for (TransactionReceipt tr : other.transactionReceipts) {
+	        this.transactionReceipts.add(new TransactionReceipt(tr)); 
+	    }
+
+	    // copy check if needed
+	    if (other.check != null) {
+	        this.check = new Check(other.check); 
+	    }
 	}
 	//getters
 	public Depositors getdepositor() {
@@ -81,6 +92,7 @@ public class Accounts {
 	}
 	private void addtransactionReceipt(TransactionReceipt receipt)	{
 		transactionReceipts.add(receipt);
+		System.out.println("DEBUG: Added transaction to account " + getAccountNumber() + ", list size now: " + transactionReceipts.size());
 	}
 	private void setcheck(Check _check)	{
 		check = _check;
@@ -92,7 +104,28 @@ public class Accounts {
 	//toString()
 	@Override
 	public String toString()	{
-		return depositor.toString() + " " + AccountNumber + " " + accountType + " " + balance + " " + date ;
+		StringBuilder sb = new StringBuilder();
+		if(getaccountType().equals("CD")) {
+			sb.append(String.format("%-12s %-12s %-12s %-10d %-12s %-12s %-10.2f %-15tD%n",
+					getdepositor().getNames().getFirstName(),
+					getdepositor().getNames().getLastName(),
+					getdepositor().getSSnumber(),
+					getAccountNumber(),
+					getaccountType(),
+					getStatus(),
+					getbalance(),
+					getDate()));
+		}else {
+			sb.append(String.format("%-12s %-12s %-12s %-10d %-12s %-12s %-10.2f%n", 
+					getdepositor().getNames().getFirstName(),
+					getdepositor().getNames().getLastName(),
+					getdepositor().getSSnumber(),
+					getAccountNumber(),
+					getaccountType(),
+					getStatus(),
+					getbalance()));
+		}
+		return sb.toString();
 	}
 	
 	//equals method

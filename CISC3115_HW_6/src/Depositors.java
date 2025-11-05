@@ -21,7 +21,7 @@ public class Depositors {
 	
 	//getters
 	public Name getNames() {
-		return name;
+		return new Name(name);
 	}
 	public String getSSnumber() {
 		return SSnumber;
