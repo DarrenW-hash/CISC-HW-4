@@ -198,30 +198,34 @@ Transaction: Account Info With Transaction History
 First Name   Last Name    SSN          Acct Num   Acct Type    Status       Balance    Maturity Date  
 Doe          John         123445678    123456     Savings      Open         277.10    
 ***** Account Transactions *****
-Account Type: Savings      Transaction Type : OPEN NEW ACCOUNT Amount: $300.80   Success: true  Reason for Failure : null        
-Account Type: Savings      Transaction Type : WITHDRAWAL       Amount: $100.00   Success: true  Reason for Failure : null        
-Account Type: Savings      Transaction Type : DEPOSIT          Amount: $76.30    Success: true  Reason for Failure : null        
+Account Type: Savings      Transaction Type : OPEN NEWACCOUNT Amount: $300.80   Success: true  Reason for Failure : null        
+***** Account Transactions ***** 
+Account Type: Savings      Transaction Type : WITHDRAWAL   Amount: $100.00     Success: true  Reason for Failure : null        
+***** Account Transactions ***** 
+Account Type: Savings      Transaction Type : DEPOSIT      Amount: $76.30      Success: true  Reason for Failure : null        
 
 Doe          John         123445678    222222     CD           Open         5200.55        12/25/25
 ***** Account Transactions *****
-Account Type: CD           Transaction Type : OPEN NEW ACCOUNT Amount: $5200.55  Success: true  Reason for Failure : null        
-Account Type: CD           Transaction Type : WITHDRAWAL       Amount: $100.00   Success: false Reason for Failure : Error: Maturity Date 11/25/2025 not reached 
-Account Type: CD           Transaction Type : DEPOSIT          Amount: $100.00   Success: false Reason for Failure : Error: Maturity Date 12/25/2025 not reached 
-
+Account Type: CD           Transaction Type : OPEN NEWACCOUNT Amount: $5200.55  Success: true  Reason for Failure : null        
+***** Account Transactions ***** 
+Account Type: CD           Transaction Type : WITHDRAWAL   Amount: $100.00     Success: false Reason for Failure : Error: Maturity Date 11/25/2025 not reached 
+***** Account Transactions ***** 
+Account Type: CD           Transaction Type : DEPOSIT      Amount: $100.00     Success: false Reason for Failure : Error: Maturity Date 12/25/2025 not reached 
 
 Doe          John         123445678    333333     Checking     Open         849.74    
 ***** Account Transactions *****
-Account Type: Checking     Transaction Type : OPEN NEW ACCOUNT Amount: $899.74   Success: true  Reason for Failure : null        
-Account Type: Checking     Transaction Type : WITHDRAWAL       Amount: $50.00    Success: true  Reason for Failure : null        
+Account Type: Checking     Transaction Type : OPEN NEWACCOUNT Amount: $899.74   Success: true  Reason for Failure : null        
+***** Account Transactions ***** 
+Account Type: Checking     Transaction Type : WITHDRAWAL   Amount: $50.00      Success: true  Reason for Failure : null        
 
 
 Transaction: Account Info With Transaction History
 First Name   Last Name    SSN          Acct Num   Acct Type    Status       Balance    Maturity Date  
 lock         Heart        266753126    875842     CD           Open         800.50         11/10/27
 ***** Account Transactions *****
-Account Type: CD           Transaction Type : OPEN NEW ACCOUNT Amount: $1000.50  Success: true  Reason for Failure : null        
-Account Type: CD           Transaction Type : WITHDRAWAL       Amount: $200.00   Success: true  Reason for Failure : null        
-
+Account Type: CD           Transaction Type : OPEN NEWACCOUNT Amount: $1000.50  Success: true  Reason for Failure : null        
+***** Account Transactions ***** 
+Account Type: CD           Transaction Type : WITHDRAWAL   Amount: $200.00     Success: true  Reason for Failure : null        
 
 
 Transaction: Account Info

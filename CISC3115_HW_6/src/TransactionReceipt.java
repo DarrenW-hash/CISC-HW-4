@@ -135,9 +135,25 @@ public class TransactionReceipt {
 					    sb.append(String.format("Maturity Date: %tD%n", postTransactionMaturityDate));
 					}
 					break;
-					
+				
 			}
 		}
 		return sb.toString();
+	}
+
+	public String toStringAcctHistory() {
+		TransactionTicket ticket = this.getTransactionTicket();
+		StringBuilder sb1 = new StringBuilder();
+//		if(getAccType().equals("CD")) {
+			sb1.append("***** Account Transactions ***** \n");
+			sb1.append(String.format("Account Type: %-12s Transaction Type : %-12s Amount: $%-10.2f Success: %-5b Reason for Failure : %-12s",
+					getAccType(),
+					ticket.getTransaction(),
+					ticket.getTransactionAmount(),
+					getTransactionSuccessIndicatorFlag(),
+					getReasonForFailure()));
+//		}
+			
+		return sb1.toString();
 	}
 }

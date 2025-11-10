@@ -10,12 +10,12 @@ public class Main_Class {
 
 	public static void main (String args []	) throws IOException {
 		//mac files
-		//File inputFile = new File("/Users/darrenweng/git/CISC-HW-6/CISC3115_HW_6/src/input.txt");
-		//PrintWriter outputWriter = new PrintWriter("/Users/darrenweng/git/CISC-HW-6/CISC3115_HW_6/src/output.txt");
+		File inputFile = new File("/Users/darrenweng/git/CISC-HW-6/CISC3115_HW_6/src/input.txt");
+		PrintWriter outputWriter = new PrintWriter("/Users/darrenweng/git/CISC-HW-6/CISC3115_HW_6/src/output.txt");
 		
 		//windows files
-		File inputFile = new File("C:\\Users\\dweng\\git\\CISC-HW-4\\CISC3115_HW_6\\src\\input.txt");
-		PrintWriter outputWriter = new PrintWriter("C:\\Users\\dweng\\git\\CISC-HW-4\\CISC3115_HW_6\\src\\output.txt");
+		//File inputFile = new File("C:\\Users\\dweng\\git\\CISC-HW-4\\CISC3115_HW_6\\src\\input.txt");
+		//PrintWriter outputWriter = new PrintWriter("C:\\Users\\dweng\\git\\CISC-HW-4\\CISC3115_HW_6\\src\\output.txt");
 		String userchoice; 
 		Scanner userinput = new Scanner(inputFile);
 		Bank bank = new Bank();
@@ -101,9 +101,9 @@ public class Main_Class {
 	public static int readaccts(Bank bank) throws IOException{
 		int currentAccount = 0;
 		//mac file 
-		//File bankAccounts = new File("/Users/darrenweng/git/CISC-HW-6/CISC3115_HW_6/src/BankAccounts.txt");
+		File bankAccounts = new File("/Users/darrenweng/git/CISC-HW-6/CISC3115_HW_6/src/BankAccounts.txt");
 		//windows file
-		File bankAccounts = new File("C:\\Users\\dweng\\git\\CISC-HW-4\\CISC3115_HW_6\\src\\BankAccounts.txt");
+		//File bankAccounts = new File("C:\\Users\\dweng\\git\\CISC-HW-4\\CISC3115_HW_6\\src\\BankAccounts.txt");
 		Scanner fileReader = new Scanner(bankAccounts);
 		
 		while(fileReader.hasNext()) {
@@ -392,31 +392,32 @@ public class Main_Class {
 			    	int index = i;
 			        found = true;
 			        Accounts acc = accounts.get(i);
-			        System.out.println(acc.gettransactionRecipts());
+			        //System.out.println(acc.gettransactionRecipts());
 			        if (acc.getaccountType().equals("CD")) {
 			        	outputWriter.println(acc.toString());
 			            if (acc.gettransactionRecipts().isEmpty()) {
-			            	System.out.println("DEBUG: 1" + acc.gettransactionRecipts());
+			            	//System.out.println("DEBUG: 1" + acc.gettransactionRecipts());
 						    outputWriter.println("No transactions yet.");
 						}else {
 							outputWriter.println("***** Account Transactions *****");
 							outputWriter.printf("Account Type: %-12s Transaction Type : %-12s Amount: $%-8.2f Success: %-5b Reason for Failure : %-12s%n",
 						               acc.getaccountType(),
-						               "OPEN NEW ACCOUNT",
+						               "OPEN NEWACCOUNT",
 						               acc.gettransactionRecipts().get(0).getPreTransactionBalance(),
 						               true,
 						               "null");
 							for (TransactionReceipt receipt : acc.gettransactionRecipts()) {
 						        TransactionTicket ticket = receipt.getTransactionTicket();   
-						        outputWriter.printf("Account Type: %-12s Transaction Type : %-16s Amount: $%-8.2f Success: %-5b Reason for Failure : %-12s%n",
-						                accounts.get(i).getaccountType(),
-						                ticket.getTransaction(),
-						                ticket.getTransactionAmount(),
-						                receipt.getTransactionSuccessIndicatorFlag(),
-						        		receipt.getReasonForFailure());
+//						        outputWriter.printf("Account Type: %-12s Transaction Type : %-16s Amount: $%-8.2f Success: %-5b Reason for Failure : %-12s%n",
+//						                accounts.get(i).getaccountType(),
+//						                ticket.getTransaction(),
+//						                ticket.getTransactionAmount(),
+//						                receipt.getTransactionSuccessIndicatorFlag(),
+//						        		receipt.getReasonForFailure());
+						        outputWriter.println(receipt.toStringAcctHistory());
 						    }
+							outputWriter.println();
 						}
-			        	outputWriter.println();
 			            
 			        } else {
 			        	outputWriter.println(acc.toString());
@@ -427,22 +428,23 @@ public class Main_Class {
 							outputWriter.println("***** Account Transactions *****");
 							outputWriter.printf("Account Type: %-12s Transaction Type : %-12s Amount: $%-8.2f Success: %-5b Reason for Failure : %-12s%n",
 									acc.getaccountType(),
-						               "OPEN NEW ACCOUNT",
+						               "OPEN NEWACCOUNT",
 						               acc.gettransactionRecipts().get(0).getPreTransactionBalance(),
 						               true,
 						               "null");
 					    }
 							for (TransactionReceipt receipt : acc.gettransactionRecipts()) {
 						        TransactionTicket ticket = receipt.getTransactionTicket();   
-						        outputWriter.printf("Account Type: %-12s Transaction Type : %-16s Amount: $%-8.2f Success: %-5b Reason for Failure : %-12s%n",
-						                accounts.get(i).getaccountType(),
-						                ticket.getTransaction(),
-						                ticket.getTransactionAmount(),
-						                receipt.getTransactionSuccessIndicatorFlag(),
-						        		receipt.getReasonForFailure());
+//						        outputWriter.printf("Account Type: %-12s Transaction Type : %-16s Amount: $%-8.2f Success: %-5b Reason for Failure : %-12s%n",
+//						                accounts.get(i).getaccountType(),
+//						                ticket.getTransaction(),
+//						                ticket.getTransactionAmount(),
+//						                receipt.getTransactionSuccessIndicatorFlag(),
+//						        		receipt.getReasonForFailure());
+						        outputWriter.println(receipt.toStringAcctHistory());   		
 						    }
-						}
-			        	outputWriter.println();
+							outputWriter.println();
+			        	}
 			        }	
 			    }
 			
