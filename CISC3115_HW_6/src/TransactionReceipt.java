@@ -112,11 +112,11 @@ public class TransactionReceipt {
 					break;
 				case("Close Account"):
 					sb.append(ticket.toString());
-					sb.append("Account Status : Now Closed");
+					sb.append("Account Status : Now Closed \n");
 					break;
 				case("Open Account"):
 					sb.append(ticket.toString());
-					sb.append("Account Status : Now Open");
+					sb.append("Account Status : Now Open \n");
 					break;
 				case("Delete Account"):
 					sb.append("Account Number " +ticket.getAccountnumber() + " has been DELETED \n");
@@ -131,7 +131,9 @@ public class TransactionReceipt {
 					sb.append(String.format("Account Type : %s%nAccount Status : %s%n",
 							getAccType(),
 							getAccStatus()));
-					sb.append(ticket.toString());
+					if(accountType.equalsIgnoreCase("CD") && postTransactionMaturityDate != null) {
+					    sb.append(String.format("Maturity Date: %tD%n", postTransactionMaturityDate));
+					}
 					break;
 					
 			}

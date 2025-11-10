@@ -21,6 +21,7 @@ public class Accounts {
 		this.accountType = accountType;
 		this.balance = balance;
 		this.accountStatus = accountStatus;
+		this.date = Calendar.getInstance();
 	}
 	
 	public Accounts(Depositors depositor, int AccountNumber, String accountType, double balance, String accountStatus, Calendar date) {
@@ -30,6 +31,7 @@ public class Accounts {
 		this.balance = balance;
 		this.accountStatus = accountStatus;
 		this.date = date;
+		
 	}
 	
 	//copy constructors
@@ -77,7 +79,11 @@ public class Accounts {
 		return balance;
 	}
 	public Calendar getDate() {
-		return (Calendar) date.clone();
+		if (this.date == null) {
+			return Calendar.getInstance(); 
+		    	}
+	 return (Calendar) this.date.clone();
+		
 	}
 	public String getStatus()	{
 		return accountStatus;

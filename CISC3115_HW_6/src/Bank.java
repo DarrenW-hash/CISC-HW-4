@@ -136,7 +136,7 @@ public class Bank {
 	 */	
 	public TransactionReceipt makeNewAcct(Accounts account) {
 		int accountNumber = account.getAccountNumber();
-		Calendar time = Calendar.getInstance();
+		Calendar time = account.getDate();
 		int index = findAcct(accountNumber);
 		int SSnumber = Integer.parseInt(account.getdepositor().getSSnumber());
 			

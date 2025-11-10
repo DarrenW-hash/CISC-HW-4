@@ -308,6 +308,7 @@ public class Main_Class {
 			maturityDate.set(year, month - 1, day);    
 		    Accounts newAccount = new Accounts(d,accountNumber,accountType,0.0, status, maturityDate);
 		    TransactionReceipt receipt = bank.makeNewAcct(newAccount);
+		    
 		        if(receipt.getTransactionSuccessIndicatorFlag() == false) {
 		        	outputWriter.println(receipt);
 		        }else {
@@ -318,7 +319,6 @@ public class Main_Class {
 //		        			ssn,
 //		        			status,
 //		        			maturityDate);
-		        	outputWriter.println();
 		        }
 
 		    }else {
@@ -472,16 +472,12 @@ public class Main_Class {
 			 // If the account exists, print the account number, type, and updated status
 			if(index != -1) {
 				if (receipt.getTransactionSuccessIndicatorFlag() == false){
-					outputWriter.println("Transaction Failed");
 					outputWriter.println(receipt);
-			    	outputWriter.println();
 				}else {
 					outputWriter.println(receipt);
-					outputWriter.println();
 				}
 			}else {
 				// If account number is not found, print an error message
-		    	outputWriter.println("Transaction Failed");
 				outputWriter.println(receipt);
 		    }
 		    
@@ -502,10 +498,8 @@ public class Main_Class {
 			if(index != -1) {
 				if (receipt.getTransactionSuccessIndicatorFlag() == false){
 					outputWriter.println(receipt);
-			    	outputWriter.println();
 				}else {
 					outputWriter.println(receipt);
-					outputWriter.println();
 				}
 			}else {
 				// If account number is not found, print an error message;

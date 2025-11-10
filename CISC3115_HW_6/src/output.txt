@@ -169,7 +169,7 @@ Transaction: New Account
 Account Number :776451 has been CREATED 
 Account Type : CD
 Account Status : Open
-Maturity Date : java.util.GregorianCalendar[time=1762756985426,areFieldsSet=true,areAllFieldsSet=true,lenient=true,zone=sun.util.calendar.ZoneInfo[id="America/New_York",offset=-18000000,dstSavings=3600000,useDaylight=true,transitions=361,lastRule=java.util.SimpleTimeZone[id=America/New_York,offset=-18000000,dstSavings=3600000,useDaylight=true,startYear=0,startMode=3,startMonth=2,startDay=8,startDayOfWeek=1,startTime=7200000,startTimeMode=0,endMode=3,endMonth=10,endDay=1,endDayOfWeek=1,endTime=7200000,endTimeMode=0]],firstDayOfWeek=1,minimalDaysInFirstWeek=1,ERA=1,YEAR=2025,MONTH=10,WEEK_OF_YEAR=46,WEEK_OF_MONTH=3,DAY_OF_MONTH=10,DAY_OF_YEAR=314,DAY_OF_WEEK=2,DAY_OF_WEEK_IN_MONTH=2,AM_PM=0,HOUR=1,HOUR_OF_DAY=1,MINUTE=43,SECOND=5,MILLISECOND=426,ZONE_OFFSET=-18000000,DST_OFFSET=0]
+Maturity Date: 11/20/25
 
 Transaction: New Account
 Transaction Failed 
@@ -178,17 +178,15 @@ Reason : Error Account Number 199753 Exist.
 ------------------------ 
 
 Transaction: Deposit
-Account Number : 776451
-Deposit Amount : 1000.24
-Old Balance : 0.00
-New Balance : 1000.24
-Account Status :Open
-CD New Maturity Date : 05/10/26
+Transaction Failed 
+Account Number 776451
+Reason : Error: Maturity Date 11/20/2025 not reached 
+------------------------ 
 
 Transaction: Balance
 Account Number : 776451
 Account Type : CD
-Balance : 1000.24
+Balance : 0.0
 
 Transaction: Balance
 Transaction Failed 
@@ -239,22 +237,19 @@ Doe          John         123445678    333333     Checking     Open         849.
 
 Transaction: Close Account
 Account Number : 333333
-Account Status : Now Closed
+Account Status : Now Closed 
 
 Transaction: Close Account
 Account Number : 389765
-Account Status : Now Closed
+Account Status : Now Closed 
 
 Transaction: Close Account
-Transaction Failed
 Transaction Failed 
 Account Number 445566
 Reason : Error: Account Number : 445566 is Already CLOSED
 ------------------------ 
 
-
 Transaction: Close Account
-Transaction Failed
 Transaction Failed 
 Account Number 887123
 Reason : Error Account Number 887123 not found.
@@ -274,11 +269,11 @@ Reason : Error: Account Number 333333 is CLOSED
 
 Transaction: Reopen Account
 Account Number : 445566
-Account Status : Now Open
+Account Status : Now Open 
 
 Transaction: Reopen Account
 Account Number : 101112
-Account Status : Now Open
+Account Status : Now Open 
 
 Transaction: Deposit
 Account Number : 445566
@@ -347,9 +342,9 @@ Potter       Harry        567432890    889900     Savings      Open         1045
 Granger      Hermione     678543901    990011     CD           Open         12500.00       01/01/27
 Malfoy       Draco        789654012    101112     Checking     Open         282.60    
 Derick       Johnson      253678532    112375     Saving       Open         0.00      
-Sarch        All          884525367    776451     CD           Open         1000.24        05/10/26
+Sarch        All          884525367    776451     CD           Open         0.00           11/20/25
 
 Total Savings: $ 29822.60
 Total Checking: $ 5984.84
-Total CD: $ 30021.49
-Total All Accounts: $ 65828.93
+Total CD: $ 29021.25
+Total All Accounts: $ 64828.69
