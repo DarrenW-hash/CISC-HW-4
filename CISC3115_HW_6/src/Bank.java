@@ -23,13 +23,15 @@ public class Bank {
 	
 	//getter 
 	public ArrayList<Accounts> getbankAccounts()	{
-		ArrayList<Accounts> copylist = new ArrayList<>();
-		for(Accounts a : bankAccounts) {
-			//System.out.println(a);
-			copylist.add(new Accounts(a));
-		}
-		return copylist;
+		ArrayList<Accounts> copyList = new ArrayList<>();
+
+	    for (Accounts a : bankAccounts) {
+	        copyList.add(new Accounts(a));  // ✅ Calls the copy constructor in Accounts
+	    }
+
+	    return copyList;
 	}
+	
 	// getters for totals
 	public static double getTotalSavings() {
 		return totalAmountInSavingAccts; }
@@ -76,7 +78,7 @@ public class Bank {
 		int index = findAcct(accountNumber);
 		if(index == -1) {
 			String ReasonForFailure  = "Error Account Number:" + accountNumber +" not found.";
-			TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonForFailure, 0.0, 0.0, Calendar.getInstance());
+			TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonForFailure, 0.0, 0.0, Calendar.getInstance(),null, null);
 			return Receipt;
 		}else {
 			System.out.println("Debug: " + getbankAccounts().get(index).getaccountType() + " " + ticket.getTransactionAmount());
@@ -91,7 +93,7 @@ public class Bank {
 		int index = findAcct(accountNumber);
 		if(index == -1) {
 			String ReasonforFailure = "Error Account Number " + accountNumber + " not found.";
-			TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonforFailure, 0.0, 0.0, Calendar.getInstance());
+			TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonforFailure, 0.0, 0.0, Calendar.getInstance(),null,null);
 			return Receipt;
 		}else {
 			System.out.println("Debug: " + getbankAccounts().get(index).getaccountType() + " " + ticket.getTransactionAmount());
@@ -105,8 +107,8 @@ public class Bank {
 	public TransactionReceipt getBalance(TransactionTicket ticket, int accountNumber) {
 		int index = findAcct(accountNumber);
 		if(index == -1) {
-			String ReasonforFailure = "Error Account Number" + accountNumber + " not found.";
-			TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonforFailure, 0.0, 0.0, Calendar.getInstance());
+			String ReasonforFailure = "Error Account Number " + accountNumber + " not found.";
+			TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonforFailure, 0.0, 0.0, Calendar.getInstance(), null,null);
 			return Receipt;
 		}else {
 			return bankAccounts.get(index).getBalance(ticket);
@@ -120,7 +122,7 @@ public class Bank {
 		int index = findAcct(accountNumber);
 		if(index == -1) {
 			String ReasonforFailure = "Error Account Number" + accountNumber + " not found.";
-			TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonforFailure, 0.0, 0.0, Calendar.getInstance());
+			TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonforFailure, 0.0, 0.0, Calendar.getInstance(),getbankAccounts().get(index).getStatus(),getbankAccounts().get(index).getaccountType());
 			return Receipt;
 		}else {
 			System.out.println("Debug: " + getbankAccounts().get(index).getaccountType() + " " + ticket.getTransactionAmount());
@@ -142,7 +144,7 @@ public class Bank {
 		if(index != -1) {
 			String ReasonforFailure = "Error Account Number " + accountNumber + " Exist.";
 			TransactionTicket ticket = new TransactionTicket(accountNumber,time,"New Account",0.0,0);
-			TransactionReceipt Receipt = new TransactionReceipt(ticket,false,ReasonforFailure,0.0,0.0,Calendar.getInstance());
+			TransactionReceipt Receipt = new TransactionReceipt(ticket,false,ReasonforFailure,0.0,0.0,Calendar.getInstance(),getbankAccounts().get(index).getStatus(), getbankAccounts().get(index).getaccountType());
 			return Receipt;
 		}else {
 			// Validate account type
@@ -153,20 +155,20 @@ public class Bank {
 					if(SSnumber >= 100000000 && SSnumber <= 999999999) {
 						bankAccounts.add(account);
 						TransactionTicket ticket = new TransactionTicket(accountNumber, time,"New Account", 0,0) ;
-						TransactionReceipt Receipt = new TransactionReceipt(ticket, true, 0.0,0.0,time);
+						TransactionReceipt Receipt = new TransactionReceipt(ticket, true, 0.0,0.0,time,getbankAccounts().get(bankAccounts.size()-1).getStatus(), getbankAccounts().get(bankAccounts.size()-1).getaccountType());
 						return Receipt;
 					}else {
 						// Invalid SSN
 						String ReasonforFailure = "Error INVALID SSN : " + account.getdepositor().getSSnumber();
 						TransactionTicket ticket = new TransactionTicket(accountNumber,time,"New Account",0.0,0);
-						TransactionReceipt Receipt = new TransactionReceipt(ticket,false,ReasonforFailure,0.0,0.0,Calendar.getInstance());
+						TransactionReceipt Receipt = new TransactionReceipt(ticket,false,ReasonforFailure,0.0,0.0,Calendar.getInstance(),getbankAccounts().get(index).getStatus(), getbankAccounts().get(index).getaccountType());
 						return Receipt;
 					}
 				}else {
 					// Invalid account number range
 					String ReasonforFailure = "Error INVALID ACCOUNT NUMBER RANGE : " + account.getAccountNumber();
 					TransactionTicket ticket = new TransactionTicket(accountNumber,time,"New Account",0.0,0);
-					TransactionReceipt Receipt = new TransactionReceipt(ticket,false,ReasonforFailure,0.0,0.0,Calendar.getInstance());
+					TransactionReceipt Receipt = new TransactionReceipt(ticket,false,ReasonforFailure,0.0,0.0,Calendar.getInstance(),getbankAccounts().get(index).getStatus(), getbankAccounts().get(index).getaccountType());
 					return Receipt;
 				}
 						
@@ -174,7 +176,7 @@ public class Bank {
 				// Invalid account type
 				String ReasonforFailure = "Error INVALID ACCOUNT TYPE of : " + account.getaccountType();
 				TransactionTicket ticket = new TransactionTicket(accountNumber,time,"New Account",0.0,0);
-				TransactionReceipt Receipt = new TransactionReceipt(ticket,false,ReasonforFailure,0.0,0.0,Calendar.getInstance());
+				TransactionReceipt Receipt = new TransactionReceipt(ticket,false,ReasonforFailure,0.0,0.0,Calendar.getInstance(),getbankAccounts().get(index).getStatus(), getbankAccounts().get(index).getaccountType());
 				return Receipt;
 			}
 		}
@@ -187,7 +189,7 @@ public class Bank {
 		int index = findAcct(accountNumber);
 		if(index == -1) {
 			String ReasonforFailure = "Error Account Number " + accountNumber + " not found.";
-			TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonforFailure, 0.0, 0.0, Calendar.getInstance());
+			TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonforFailure, 0.0, 0.0, Calendar.getInstance(),null,null);
 			return Receipt;
 				}else {
 					return bankAccounts.get(index).closeAcct(ticket);
@@ -201,7 +203,7 @@ public class Bank {
 		int index = findAcct(accountNumber);
 		if(index == -1) {
 			String ReasonforFailure = "Error Account Number " + accountNumber + " not found.";
-			TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonforFailure, 0.0, 0.0, Calendar.getInstance());
+			TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonforFailure, 0.0, 0.0, Calendar.getInstance(),null,null);
 			return Receipt;
 				}else {
 					return bankAccounts.get(index).openAcct(ticket);
@@ -215,16 +217,16 @@ public class Bank {
 		int index = findAcct(accountNumber);
 		if(index == -1) {
 			String ReasonforFailure = "Error Account Number " + accountNumber + " not found.";
-			TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonforFailure, 0, 0.0, Calendar.getInstance());
+			TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonforFailure, 0, 0.0, Calendar.getInstance(),null, null);
 			return Receipt;
 			}else {
 				if(bankAccounts.get(index).getbalance() > 0) {
 					String ReasonforFailure = "Error Account Number " + accountNumber + " has a balance of " + bankAccounts.get(index).getbalance();
-					TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonforFailure, 0, 0.0, Calendar.getInstance());
+					TransactionReceipt Receipt = new TransactionReceipt(ticket, false, ReasonforFailure, 0, 0.0, Calendar.getInstance(),getbankAccounts().get(index).getStatus(), getbankAccounts().get(index).getaccountType());
 					return Receipt;
 				}else {
 					bankAccounts.remove(index);
-					TransactionReceipt Receipt = new TransactionReceipt(ticket, true, 0.0,0.0,Calendar.getInstance());
+					TransactionReceipt Receipt = new TransactionReceipt(ticket, true, 0.0,0.0,Calendar.getInstance(),getbankAccounts().get(index).getStatus(), getbankAccounts().get(index).getaccountType());
 					return Receipt;
 			}
 		}

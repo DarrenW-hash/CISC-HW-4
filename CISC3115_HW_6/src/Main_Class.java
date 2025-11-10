@@ -12,6 +12,7 @@ public class Main_Class {
 		//mac files
 		//File inputFile = new File("/Users/darrenweng/git/CISC-HW-6/CISC3115_HW_6/src/input.txt");
 		//PrintWriter outputWriter = new PrintWriter("/Users/darrenweng/git/CISC-HW-6/CISC3115_HW_6/src/output.txt");
+		
 		//windows files
 		File inputFile = new File("C:\\Users\\dweng\\git\\CISC-HW-4\\CISC3115_HW_6\\src\\input.txt");
 		PrintWriter outputWriter = new PrintWriter("C:\\Users\\dweng\\git\\CISC-HW-4\\CISC3115_HW_6\\src\\output.txt");
@@ -94,6 +95,7 @@ public class Main_Class {
 			}
 		}while(!userchoice.equalsIgnoreCase("Q"));
 		outputWriter.flush();
+		outputWriter.close();
 		
 	}
 	public static int readaccts(Bank bank) throws IOException{
@@ -149,85 +151,54 @@ public class Main_Class {
 	
 	public static void printAccts(Bank bank, PrintWriter outputWriter)	{
 		ArrayList<Accounts> acc = bank.getbankAccounts();
-		outputWriter.printf("%-12s %-12s %-12s %-10s %-12s %-12s %-12s %-15s%n",
+		outputWriter.printf("%-12s %-12s %-12s %-10s %-12s %-12s %-12s %8s%n",
 				"First Name", "Last Name", "SSN", "ACCT NUM","ACCT TYPE", "STATUS", "BALANCE","MATURITY DATE");
 		
 		for(Accounts a : acc) {
-			if(a.getaccountType().equals("CD")) {
-				outputWriter.printf("%-12s %-12s %-12s %-10d %-12s %-12s %-10.2f %-15tD%n", 
-						a.getdepositor().getNames().getFirstName(),
-						a.getdepositor().getNames().getLastName(),
-						a.getdepositor().getSSnumber(),
-						a.getAccountNumber(),
-						a.getaccountType(),
-						a.getStatus(),
-						a.getbalance(),
-						a.getDate());
-			}else{
-				outputWriter.printf("%-12s %-12s %-12s %-10d %-12s %-12s %-10.2f%n", 
-						a.getdepositor().getNames().getFirstName(),
-						a.getdepositor().getNames().getLastName(),
-						a.getdepositor().getSSnumber(),
-						a.getAccountNumber(),
-						a.getaccountType(),
-						a.getStatus(),
-						a.getbalance());
-			}
+			outputWriter.println(a.toString());
 		}
 		
 		outputWriter.println();
 		outputWriter.flush();
 	}
-	
+	/* Prints a detailed transaction receipt to the provided PrintWriter output stream.
+	 * The receipt includes transaction details, updated account information, and 
+ 	 * (for CDs) updated maturity dates 
+	 */
 	public static void printTransactionReceipt(Bank bank, PrintWriter outputWriter, TransactionReceipt Receipt) {
 		ArrayList<Accounts> accounts = bank.getbankAccounts();
 		
 		int index = bank.getindex();
-		System.out.println(index);
 		if(index == -1) {
-			outputWriter.println("Transaction Failed");
-	    	outputWriter.println(Receipt. getReasonForFailure());
-	    	outputWriter.println("--------------------");
-	    	outputWriter.println();
+	    	outputWriter.println(Receipt.toString());
 		}else {
 			if(Receipt.getTransactionSuccessIndicatorFlag() == false) {
-				outputWriter.println("Transaction Failed");
-				outputWriter.println("Account Type : " + accounts.get(index).getaccountType());
-				outputWriter.println(Receipt);
-				outputWriter.println();
+				outputWriter.println(Receipt.toString());
 			}else {
-					if(accounts.get(index).getaccountType().equalsIgnoreCase("CD")) {
-						if(Receipt.getTransactionTicket().getTransaction().equals("WITHDRAWAL")) {
-							outputWriter.println(Receipt);
-							outputWriter.printf("CD New Maturity Date : %tD%n",accounts.get(index).getDate());
-							outputWriter.println("Account Status : " + accounts.get(index).getStatus());
-							outputWriter.println();
-						}else if(Receipt.getTransactionTicket().getTransaction().equals("DEPOSIT")) {
-							outputWriter.println(Receipt);
-							outputWriter.printf("CD New Maturity Date : %tD%n",accounts.get(index).getDate());
-							outputWriter.println("Account Status : " + accounts.get(index).getStatus());
-							outputWriter.println();
-						}
-					}else {
-						if(Receipt.getTransactionTicket().getTransaction().equals("WITHDRAWAL")) {
-							outputWriter.println(Receipt);
-							outputWriter.println("Account Status : " +accounts.get(index).getStatus());
-							outputWriter.println();
-						}else if(Receipt.getTransactionTicket().getTransaction().equals("DEPOSIT")) {
-							outputWriter.println(Receipt);
-							outputWriter.println("Account Status : " +accounts.get(index).getStatus());
-							outputWriter.println();
-						}else if(Receipt.getTransactionTicket().getTransaction().equals("Clear Check")) {
-								outputWriter.println(Receipt);
-								outputWriter.println("Account Status : " +accounts.get(index).getStatus());
-								outputWriter.println();
-						}
+				if(accounts.get(index).getaccountType().equalsIgnoreCase("CD")) {
+					if(Receipt.getTransactionTicket().getTransaction().equals("WITHDRAWAL")) {
+						outputWriter.println(Receipt.toString());;
+					}else if(Receipt.getTransactionTicket().getTransaction().equals("DEPOSIT")) {
+						outputWriter.println(Receipt.toString());
 					}
+				}else {
+					if(Receipt.getTransactionTicket().getTransaction().equals("WITHDRAWAL")) {
+						outputWriter.println(Receipt.toString());
+					}else if(Receipt.getTransactionTicket().getTransaction().equals("DEPOSIT")) {
+						outputWriter.println(Receipt.toString());
+					}else if(Receipt.getTransactionTicket().getTransaction().equals("Clear Check")) {
+						outputWriter.println(Receipt.toString());
+					}
+				}
 			}
 		}
 		outputWriter.flush();
 	}
-	
+	/* Handles a withdrawal transaction from a user's account.
+	 * Prompts the user for the account number and withdrawal amount,
+	 * creates a TransactionTicket, requests the Bank to process it,
+	 * and prints the resulting TransactionReceipt.
+	 */
 	public static void withdrawalMethod(Bank bank, PrintWriter outputWriter, Scanner userinput)	{
 		ArrayList<Accounts> acc = bank.getbankAccounts();
 		outputWriter.println("Transaction Type : Withdrawal ");
@@ -269,17 +240,12 @@ public class Main_Class {
 		Calendar time = Calendar.getInstance();
 		TransactionTicket ticket = new TransactionTicket(accountNumber, time, "BALANCE", 0.0 , 0);	
 		TransactionReceipt receipt = bank.getBalance(ticket,accountNumber);
-		int index = bank.getindex();			if(index != -1) {
-			outputWriter.printf("Account Number : %d%nAccount Type : %s%nCurrent Balance : %.2f%n",
-					ticket.getAccountnumber(),
-					accounts.get(index).getaccountType(),
-					accounts.get(index).getbalance());
-			outputWriter.println();
+		int index = bank.getindex();		
+		if(index != -1) {
+			outputWriter.println(receipt);
 		}else {
-			outputWriter.println("Transaction Failed");
-		    outputWriter.println("ERROR Account not Found " + accountNumber);
-		    outputWriter.println("--------------------");
-		    outputWriter.println();
+			outputWriter.println(receipt);
+
 		}	
 	}
 	/* Processes a check-clearing transaction for a specific bank account.
@@ -343,19 +309,15 @@ public class Main_Class {
 		    Accounts newAccount = new Accounts(d,accountNumber,accountType,0.0, status, maturityDate);
 		    TransactionReceipt receipt = bank.makeNewAcct(newAccount);
 		        if(receipt.getTransactionSuccessIndicatorFlag() == false) {
-//		        	outputWriter.println("Transaction Failed");
-//		        	outputWriter.println("ERROR New Account failed : "+ receipt.getReasonForFailure());
-//		        	outputWriter.println("--------------------");
-//			    	outputWriter.println();
 		        	outputWriter.println(receipt);
 		        }else {
 		        	// Print success message including maturity date	
-		        	outputWriter.printf("Account Number : %d%nAccount Type : %s%nSSN : %s%nAccount Status : %s%nMaturity Date : %tD%n", 
-		        			receipt.getTransactionTicket().getAccountnumber(),
-		        			accountType,
-		        			ssn,
-		        			status,
-		        			maturityDate);
+		        	outputWriter.println(receipt);
+//		        	outputWriter.printf("Account Type : %s%nSSN : %s%nAccount Status : %s%nMaturity Date : %tD%n", 
+//		        			accountType,
+//		        			ssn,
+//		        			status,
+//		        			maturityDate);
 		        	outputWriter.println();
 		        }
 
@@ -365,10 +327,6 @@ public class Main_Class {
 			    TransactionReceipt receipt = bank.makeNewAcct(newAccount);
 			    // Handle success or failure messages
 			    if(receipt.getTransactionSuccessIndicatorFlag() == false) {
-//			    	outputWriter.println("Transaction Failed");
-//		        	outputWriter.println("ERROR New Account failed : "+ receipt.getReasonForFailure());
-//		        	outputWriter.println("--------------------");
-//			    	outputWriter.println();
 			    	outputWriter.println(receipt);
 		        }else {
 		        	// Print confirmation message for non-CD account
@@ -543,7 +501,6 @@ public class Main_Class {
 			int index = bank.getindex();
 			if(index != -1) {
 				if (receipt.getTransactionSuccessIndicatorFlag() == false){
-					outputWriter.println("Transaction Failed");
 					outputWriter.println(receipt);
 			    	outputWriter.println();
 				}else {
@@ -551,8 +508,7 @@ public class Main_Class {
 					outputWriter.println();
 				}
 			}else {
-				// If account number is not found, print an error message
-		    	outputWriter.println("Transaction Failed");
+				// If account number is not found, print an error message;
 		    	outputWriter.println(receipt);
 			} 
 		}

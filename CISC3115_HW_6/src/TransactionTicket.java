@@ -65,7 +65,11 @@ public class TransactionTicket {
 				sb.append(String.format("Account Number : %d%n", 
 						getAccountnumber()));
 				break;
+			case("New Account"):
+				sb.append("Maturity Date : "+ getDateofTransaction());
+				break;
 		}
 		return sb.toString();
+		
 	}
 }

@@ -34,7 +34,7 @@ public class Accounts {
 	
 	//copy constructors
 	public Accounts(Accounts other)	{
-		this.depositor = other.depositor;
+		this.depositor = new Depositors(other.depositor);
 		this.AccountNumber = other.AccountNumber;
 		this.balance = other.balance;
 		this.accountStatus = other.accountStatus;
@@ -106,7 +106,7 @@ public class Accounts {
 	public String toString()	{
 		StringBuilder sb = new StringBuilder();
 		if(getaccountType().equals("CD")) {
-			sb.append(String.format("%-12s %-12s %-12s %-10d %-12s %-12s %-10.2f %-15tD%n",
+			sb.append(String.format("%-12s %-12s %-12s %-10d %-12s %-12s %-10.2f %12tD",
 					getdepositor().getNames().getFirstName(),
 					getdepositor().getNames().getLastName(),
 					getdepositor().getSSnumber(),
@@ -116,7 +116,7 @@ public class Accounts {
 					getbalance(),
 					getDate()));
 		}else {
-			sb.append(String.format("%-12s %-12s %-12s %-10d %-12s %-12s %-10.2f%n", 
+			sb.append(String.format("%-12s %-12s %-12s %-10d %-12s %-12s %-10.2f", 
 					getdepositor().getNames().getFirstName(),
 					getdepositor().getNames().getLastName(),
 					getdepositor().getSSnumber(),
@@ -152,7 +152,7 @@ public class Accounts {
 		//check if th3e account is closed
 		if(getStatus().equals("Closed")) {
 			String reason = "Error: Account Number " + ticket.getAccountnumber() + " is CLOSED";
-			receipt = new TransactionReceipt(ticket, false, reason, preTransaction, preTransaction, currentDate);
+			receipt = new TransactionReceipt(ticket, false, reason, preTransaction, preTransaction, currentDate, getStatus(),getaccountType());
 			addtransactionReceipt(receipt);
 			return receipt;
 		}else {
@@ -163,7 +163,7 @@ public class Accounts {
 					int day = maturity.get(Calendar.DAY_OF_MONTH);
 					int year = maturity.get(Calendar.YEAR);
 					String reason = "Error: Maturity Date " + month + "/" + day + "/" + year + " not reached ";
-					receipt = new TransactionReceipt(ticket, false, reason, getbalance(), getbalance(), getDate());
+					receipt = new TransactionReceipt(ticket, false, reason, getbalance(), getbalance(), getDate(), getStatus(),getaccountType());
 					addtransactionReceipt(receipt);
 					return receipt;
 				}else {
@@ -180,26 +180,26 @@ public class Accounts {
 					}
 					//successful withdrawal 
 					setbalance(newBalance);
-					receipt = new TransactionReceipt(ticket, true, preTransaction, newBalance, getDate());
+					receipt = new TransactionReceipt(ticket, true, preTransaction, newBalance, getDate(), getStatus(), getaccountType());
 					addtransactionReceipt(receipt);
 					return receipt;
 				}
 			}else {
 				if(ticket.getTransactionAmount() < 0) {
 					String reason = String.format("Error: Invalid Withdrawal input: %.2f",ticket.getTransactionAmount());
-					receipt = new TransactionReceipt(ticket, false, reason, preTransaction, preTransaction, currentDate);
+					receipt = new TransactionReceipt(ticket, false, reason, preTransaction, preTransaction, currentDate,getStatus(), getaccountType());
 					addtransactionReceipt(receipt);
 					return receipt;
 				}else if(preTransaction < ticket.getTransactionAmount()) {
 					String reason = String.format("Error: Insufficient funds. Withdrawal Amount: %.2f. Current Balance: %.2f", ticket.getTransactionAmount(), getbalance());
-					receipt = new TransactionReceipt(ticket, false, reason, preTransaction, preTransaction, currentDate);
+					receipt = new TransactionReceipt(ticket, false, reason, preTransaction, preTransaction, currentDate,getStatus(), getaccountType());
 					addtransactionReceipt(receipt);
 					return receipt;
 				}else {
 					//successful withdrawal
 					double newBalance = preTransaction - ticket.getTransactionAmount();
 					setbalance(newBalance);
-					receipt =  new TransactionReceipt(ticket, true, preTransaction,newBalance,currentDate);
+					receipt =  new TransactionReceipt(ticket, true, preTransaction,newBalance,currentDate,getStatus(), getaccountType());
 					addtransactionReceipt(receipt);
 					return receipt;
 				}
@@ -221,7 +221,7 @@ public class Accounts {
 			 // Check if the account is closed
 			if(getStatus().equals("Closed")) {
 				String reason = "Error: Account Number : " + ticket.getAccountnumber()+ " is CLOSED";
-				receipt = new TransactionReceipt(ticket, false, reason, preTransaction, preTransaction, currentDate);
+				receipt = new TransactionReceipt(ticket, false, reason, preTransaction, preTransaction, currentDate, getStatus(),getaccountType());
 				addtransactionReceipt(receipt); 
 				return receipt;
 			}else {
@@ -233,7 +233,7 @@ public class Accounts {
 						int day = maturity.get(Calendar.DAY_OF_MONTH);
 						int year = maturity.get(Calendar.YEAR);
 						String reason = "Error: Maturity Date " + month + "/" + day + "/" + year + " not reached ";
-						receipt = new TransactionReceipt(ticket, false, reason, getbalance(),getbalance(), date);
+						receipt = new TransactionReceipt(ticket, false, reason, getbalance(),getbalance(), getDate(), getStatus(),getaccountType());
 						addtransactionReceipt(receipt); 
 						return receipt;
 					}else {
@@ -250,7 +250,7 @@ public class Accounts {
 						}
 						// Successful deposit
 						setbalance(newBalance);
-						receipt = new TransactionReceipt(ticket, true, preTransaction, newBalance, date);
+						receipt = new TransactionReceipt(ticket, true, preTransaction, newBalance, getDate(), getStatus(),getaccountType());
 						addtransactionReceipt(receipt); 
 						return receipt;
 					}
@@ -261,14 +261,14 @@ public class Accounts {
 				        	    "Error: Invalid Deposit input: %.2f",
 				        	    ticket.getTransactionAmount()
 				        	);
-						receipt = new TransactionReceipt(ticket, false, reason, preTransaction, preTransaction, currentDate);
+						receipt = new TransactionReceipt(ticket, false, reason, preTransaction, preTransaction, currentDate,getStatus(),getaccountType());
 						addtransactionReceipt(receipt); 
 				        return receipt;
 					}else {
 						// Successful deposit
 						double newBalance = preTransaction + ticket.getTransactionAmount();
 						setbalance(newBalance);
-						receipt = new TransactionReceipt(ticket, true, preTransaction, newBalance, currentDate);
+						receipt = new TransactionReceipt(ticket, true, preTransaction, newBalance, currentDate, getStatus(),getaccountType());
 						addtransactionReceipt(receipt); 
 						return receipt;
 					}
@@ -282,7 +282,7 @@ public class Accounts {
 	public TransactionReceipt getBalance(TransactionTicket ticket){
 		TransactionReceipt receipt;
 		Calendar currentDate = Calendar.getInstance();
-		receipt = new TransactionReceipt(ticket,true,getbalance(),0,currentDate);
+		receipt = new TransactionReceipt(ticket,true,getbalance(),0,currentDate, getStatus(), getaccountType());
 		addtransactionReceipt(receipt);
 		return receipt;
 	}
@@ -318,14 +318,14 @@ public class Accounts {
 		    int staleYear = sixMonthsAgo.get(Calendar.YEAR);        
 		    if(getStatus().equals("Closed")) {
 		    	String reason = "Error: Account Number : " + ticket.getAccountnumber()+ " is CLOSED";
-		    		receipt = new TransactionReceipt(ticket, false, reason, preTransaction, preTransaction, currentDate);
+		    		receipt = new TransactionReceipt(ticket, false, reason, preTransaction, preTransaction, currentDate,getStatus(),getaccountType());
 		    		addtransactionReceipt(receipt); 
 		    		return receipt;
 		    	}else {
 					 // Check if the check is post-dated
 					if(check.getDateofCheck().after(currentDate)) {
 						String reason = "Error:Check not cleared - Post-dated check: " + checkMonth + "/" + checkDay + "/" + checkYear;
-					  	receipt = new TransactionReceipt(ticket, false, reason, preTransaction, preTransaction, currentDate);
+					  	receipt = new TransactionReceipt(ticket, false, reason, preTransaction, preTransaction, currentDate,getStatus(),getaccountType());
 					    addtransactionReceipt(receipt); 
 					    return receipt; 
 						}else {
@@ -334,7 +334,7 @@ public class Accounts {
 							String reason = "Error: Cannot clear stale check (older than 6 months). "
 		                           + "Check Date: " + checkMonth + "/" + checkDay + "/" + checkYear + ". "
 		                           + "Oldest Acceptable Date: " + staleMonth + "/" + staleDay + "/" + staleYear;
-						      receipt = new TransactionReceipt(ticket, false, reason, preTransaction, preTransaction, currentDate);
+						      receipt = new TransactionReceipt(ticket, false, reason, preTransaction, preTransaction, currentDate,getStatus(),getaccountType());
 						      addtransactionReceipt(receipt); 
 						      return receipt;
 						}
@@ -345,13 +345,13 @@ public class Accounts {
 								setbalance(newBalance);
 								String reason = "Error: Insufficient funds. $2.50 service fee applied for bounced check - " 
 										+ "Old Balance : " + preTransaction+" | " + "New Balance : " + newBalance;
-							    receipt = new TransactionReceipt(ticket, false, reason, preTransaction, newBalance, currentDate);
+							    receipt = new TransactionReceipt(ticket, false, reason, preTransaction, newBalance, currentDate, getStatus(),getaccountType());
 							    addtransactionReceipt(receipt);
 							    return receipt;
 							}else {
 								double newBalance = preTransaction - check.getCheckAmount();
 								setbalance(newBalance);
-								receipt = new TransactionReceipt(ticket, true, preTransaction, newBalance, currentDate);
+								receipt = new TransactionReceipt(ticket, true, preTransaction, newBalance, currentDate, getStatus(),getaccountType());
 								addtransactionReceipt(receipt);
 								return receipt;
 							}
@@ -361,7 +361,7 @@ public class Accounts {
 			}else {
 				// Reject non-Checking accounts
 				String reason = "Error only Clear Checking Accounts. " + "Account Type : " + getaccountType();
-				receipt = new TransactionReceipt(ticket,false,reason,0,0,currentDate);
+				receipt = new TransactionReceipt(ticket,false,reason,0,0,currentDate, getStatus(),getaccountType());
 				addtransactionReceipt(receipt); 
 				return receipt;
 		}
@@ -376,12 +376,12 @@ public class Accounts {
 			
 		if(getStatus().equals("Closed")) {
 			String reason = "Error: Account Number : " + ticket.getAccountnumber()+ " is Already CLOSED";
-			receipt = new TransactionReceipt(ticket, false, reason, 0, 0, currentDate);
+			receipt = new TransactionReceipt(ticket, false, reason, 0, 0, currentDate, getStatus(),getaccountType());
 			addtransactionReceipt(receipt); 
 			return receipt;
 				}else {
 					setAccountStatus("Closed");
-					receipt = new TransactionReceipt(ticket, true,0,0, currentDate);
+					receipt = new TransactionReceipt(ticket, true,0,0, currentDate, getStatus(),getaccountType());
 					addtransactionReceipt(receipt);
 					return receipt;
 				
@@ -397,12 +397,12 @@ public class Accounts {
 			
 		if(getStatus().equals("Open")) {
 			String reason = "Error: Account Number : " + ticket.getAccountnumber()+ " is Already Open";
-			receipt = new TransactionReceipt(ticket, false, reason, 0, 0, currentDate);
+			receipt = new TransactionReceipt(ticket, false, reason, 0, 0, currentDate, getStatus(),getaccountType());
 			addtransactionReceipt(receipt); 
 			return receipt;
 				}else {
 					setAccountStatus("Open");
-					receipt = new TransactionReceipt(ticket, true,0,0, currentDate);
+					receipt = new TransactionReceipt(ticket, true,0,0, currentDate, getStatus(),getaccountType());
 					addtransactionReceipt(receipt);
 					return receipt;
 		}

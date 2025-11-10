@@ -8,24 +8,32 @@ public class TransactionReceipt {
 	private double PreTransactionBalance;
 	private double PostTransactionBalance;
 	private Calendar postTransactionMaturityDate;
+	private String accountStatus;
+	private String accountType;
 	
-	public TransactionReceipt(TransactionTicket ticket, boolean TranactionSuccessIndicatorFlag, double PreTransactionBalance, double PostTransactionBalance, Calendar postTransactionMaturityDate ) {
+	public TransactionReceipt(TransactionTicket ticket, boolean TranactionSuccessIndicatorFlag, double PreTransactionBalance, double PostTransactionBalance, Calendar postTransactionMaturityDate, String accountStatus, String accountType ) {
 		this.ticket = ticket;
 		this.TransactionSuccessIndicatorFlag = TranactionSuccessIndicatorFlag;
 		this.PreTransactionBalance = PreTransactionBalance;
 		this.PostTransactionBalance = PostTransactionBalance;
 		this.postTransactionMaturityDate = postTransactionMaturityDate;
+		this.accountStatus = accountStatus;
+		this.accountType = accountType;
 	
 	}
 	
-	public TransactionReceipt(TransactionTicket ticket, boolean TranactionSuccessIndicatorFlag,String ReasonForFailure, double PreTransactionBalance, double PostTransactionBalance, Calendar postTransactionMaturityDate) {
+	public TransactionReceipt(TransactionTicket ticket, boolean TranactionSuccessIndicatorFlag,String ReasonForFailure, double PreTransactionBalance, double PostTransactionBalance, Calendar postTransactionMaturityDate, String accountStatus, String accountType) {
 		this.ticket = ticket;
 		this.TransactionSuccessIndicatorFlag = TranactionSuccessIndicatorFlag;
 		this.PreTransactionBalance = PreTransactionBalance;
 		this.PostTransactionBalance = PostTransactionBalance;
 		this.ReasonForFailure = ReasonForFailure;
 		this.postTransactionMaturityDate = postTransactionMaturityDate;
+		this.accountStatus = accountStatus;
+		this.accountType = accountType;
 	}
+	
+	
 	//copy constructor
 	public TransactionReceipt(TransactionReceipt other) {
 	    this.ticket = new TransactionTicket(other.ticket); 
@@ -34,6 +42,8 @@ public class TransactionReceipt {
 	    this.PreTransactionBalance = other.PreTransactionBalance;
 	    this.PostTransactionBalance = other.PostTransactionBalance;
 	    this.postTransactionMaturityDate = (Calendar) other.postTransactionMaturityDate.clone();
+	    this.accountStatus = other.accountStatus;
+	    this.accountType = other.accountType;
 	}
 	//getters 
 	public TransactionTicket getTransactionTicket() {
@@ -54,6 +64,12 @@ public class TransactionReceipt {
 	public Calendar getPostTransactionMaturityDate() {
 		return postTransactionMaturityDate;
 	}
+	public String getAccStatus() {
+		return accountStatus;
+	}
+	public String getAccType()	{
+		return accountType;
+	}
 	
 	//toString 
 	@Override
@@ -63,25 +79,36 @@ public class TransactionReceipt {
 			sb.append("Transaction Failed \n");
 			sb.append("Account Number " + ticket.getAccountnumber() + "\n");
 			sb.append("Reason : " + ReasonForFailure + "\n");
+			sb.append("------------------------ \n");
+	
 		}else {
 			switch(ticket.getTransaction()) {
 				case("WITHDRAWAL"):
 					sb.append(ticket.toString());
-					sb.append(String.format("Old Balance : %.2f%nNew Balance : %.2f",
+					sb.append(String.format("Old Balance : %.2f%nNew Balance : %.2f%n",
 							getPreTransactionBalance(),
 							getPostTransactionBalance()));
+					sb.append("Account Status :" + getAccStatus() + "\n");
+					if(getAccType().equals("CD")) {
+						sb.append(String.format("CD New Maturity Date : %tD%n",  getPostTransactionMaturityDate()));
+					}
 					break;
 				case("DEPOSIT"):
 					sb.append(ticket.toString());
-					sb.append(String.format("Old Balance : %.2f%nNew Balance : %.2f",
+					sb.append(String.format("Old Balance : %.2f%nNew Balance : %.2f%n",
 							getPreTransactionBalance(),
 							getPostTransactionBalance()));
+					sb.append("Account Status :" + getAccStatus() + "\n");
+					if(getAccType().equals("CD")) {
+						sb.append(String.format("CD New Maturity Date : %tD%n", getPostTransactionMaturityDate()));
+					}
 					break;
 				case("Clear Check"):
 					sb.append(ticket.toString());
-					sb.append(String.format("Old Balance : %.2f%nNew Balance : %.2f",
+					sb.append(String.format("Old Balance : %.2f%nNew Balance : %.2f%n",
 							getPreTransactionBalance(),
 							getPostTransactionBalance()));
+					sb.append("Account Status : " + getAccStatus() + "\n");
 					break;
 				case("Close Account"):
 					sb.append(ticket.toString());
@@ -93,6 +120,19 @@ public class TransactionReceipt {
 					break;
 				case("Delete Account"):
 					sb.append("Account Number " +ticket.getAccountnumber() + " has been DELETED \n");
+					break;
+				case("BALANCE"):
+					sb.append("Account Number : "+ticket.getAccountnumber() + "\n");
+					sb.append("Account Type : " + getAccType() +"\n");
+					sb.append("Balance : " + getPreTransactionBalance() + "\n");
+					break;
+				case("New Account"):
+					sb.append("Account Number :" + ticket.getAccountnumber() + " has been CREATED \n");
+					sb.append(String.format("Account Type : %s%nAccount Status : %s%n",
+							getAccType(),
+							getAccStatus()));
+					sb.append(ticket.toString());
+					break;
 					
 			}
 		}
